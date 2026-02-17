@@ -1,4 +1,4 @@
-# karospace-atlas
+# KaroSpaceSE
 
 Lightweight landing portal for KaroSpace viewers using a hybrid Cloudflare setup:
 - Cloudflare Pages serves the landing site from `/site`
