@@ -1,0 +1,26 @@
+[
+  {
+    "title": "PBMC Pilot Viewer",
+    "description": "Small single-file KaroSpace export published directly to R2.",
+    "slug": "pbmc-pilot",
+    "type": "single",
+    "r2_path": "viewers/pbmc-pilot.html",
+    "tags": ["pilot", "pbmc", "single-file"]
+  },
+  {
+    "title": "Brain Atlas (Externalized)",
+    "description": "Large KaroSpace export externalized into a directory viewer with chunked data.",
+    "slug": "brain-atlas-v1",
+    "type": "directory",
+    "r2_path": "viewers/brain-atlas-v1/index.html",
+    "tags": ["brain", "atlas", "externalized", "large"]
+  },
+  {
+    "title": "Upcoming Dataset",
+    "description": "Placeholder entry for the next published viewer.",
+    "slug": "coming-soon",
+    "type": "directory",
+    "r2_path": "viewers/coming-soon/index.html",
+    "tags": ["placeholder", "pending"]
+  }
+]

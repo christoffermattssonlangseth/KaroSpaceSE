@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KaroSpace Viewers</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <p class="eyebrow">KaroSpace</p>
+      <h1>Dataset Viewers</h1>
+      <p class="hero__text">
+        Browse and launch published KaroSpace viewers from Cloudflare R2.
+      </p>
+      <label class="search">
+        <span class="search__label">Search datasets</span>
+        <input id="searchInput" type="search" placeholder="Filter by title, description, or tags">
+      </label>
+      <p id="resultCount" class="result-count" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="cards" class="cards" aria-live="polite"></section>
+    <p id="emptyState" class="empty hidden">No datasets match your search.</p>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card">
+      <h2 class="card__title"></h2>
+      <p class="card__description"></p>
+      <div class="card__meta">
+        <span class="badge badge--type"></span>
+        <div class="tag-list"></div>
+      </div>
+      <a class="button" target="_blank" rel="noopener noreferrer">Open viewer</a>
+    </article>
+  </template>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
