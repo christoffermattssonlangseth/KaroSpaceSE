@@ -94,5 +94,21 @@
     ],
     "thumbnail": "thumbs/xenium_adenocarcinoma.jpg",
     "citation": "10x Genomics. Xenium Human Pancreatic Dataset Explorer. https://www.10xgenomics.com/products/xenium-human-pancreatic-dataset-explorer"
+  },
+  {
+    "title": "HybISS Mouse Pup",
+    "description": "Human pancreas with adenocarcinoma dataset viewer using HybISS technology.",
+    "slug": "hybiss_mouse_pup",
+    "type": "single",
+    "r2_path": "viewers/hybiss_mouse_pup.html",
+    "tags": [
+      "HybISS",
+      "RNA",
+      "mouse",
+      "pup",
+      "single-file"
+    ],
+    "citation": "Manno, G. L. et al. Molecular architecture of the developing mouse brain. Nature 1-5 (2021) doi:10.1038/s41586-021-03775-x.",
+    "thumbnail": "thumbs/hybiss_mouse_pup.jpg"
   }
 ]
