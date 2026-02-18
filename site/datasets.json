@@ -16,7 +16,7 @@
   },
   {
     "title": "Merfish Coronal",
-    "description": "Externalized KaroSpace viewer for MERFISH coronal section data.",
+    "description": "MERFISH coronal section dataset viewer.",
     "slug": "Merfish_coronal",
     "type": "directory",
     "r2_path": "viewers/Merfish_coronal/index.html",
