@@ -4,7 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KaroSpace Viewers</title>
-  <link rel="stylesheet" href="./style.css?v=20260218-3">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("karospace-theme");
+        var theme = stored === "dark" || stored === "light"
+          ? stored
+          : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="./style.css?v=20260218-4">
 </head>
 <body>
   <header class="header">
@@ -13,6 +26,9 @@
         <p class="eyebrow">KaroSpace</p>
         <h1>KaroSpace: a lightweight framework for interactive exploration of multi-sample spatial omics data</h1>
       </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        Dark mode: off
+      </button>
     </div>
   </header>
 
@@ -81,6 +97,6 @@
     </article>
   </template>
 
-  <script src="./app.js?v=20260218-2" defer></script>
+  <script src="./app.js?v=20260218-3" defer></script>
 </body>
 </html>

@@ -1,13 +1,76 @@
 const DATASETS_URL = "./datasets.json";
 const VIEWER_HOST = "https://viewers.karospace.se";
+const THEME_STORAGE_KEY = "karospace-theme";
 
 const cardsEl = document.getElementById("cards");
 const searchEl = document.getElementById("searchInput");
 const emptyEl = document.getElementById("emptyState");
 const resultCountEl = document.getElementById("resultCount");
 const templateEl = document.getElementById("cardTemplate");
+const themeToggleEl = document.getElementById("themeToggle");
 
 let allDatasets = [];
+
+function readStoredTheme() {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === "dark" || stored === "light") {
+      return stored;
+    }
+  } catch (error) {
+    // Ignore storage errors and fall back to defaults.
+  }
+  return null;
+}
+
+function detectSystemTheme() {
+  if (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return "dark";
+  }
+  return "light";
+}
+
+function applyTheme(theme, options = {}) {
+  const { persist = false } = options;
+  const resolved = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", resolved);
+
+  if (themeToggleEl) {
+    const isDark = resolved === "dark";
+    themeToggleEl.textContent = isDark ? "Dark mode: on" : "Dark mode: off";
+    themeToggleEl.setAttribute(
+      "aria-label",
+      isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
+    themeToggleEl.setAttribute("aria-pressed", String(isDark));
+  }
+
+  if (persist) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, resolved);
+    } catch (error) {
+      // Ignore storage errors in restrictive environments.
+    }
+  }
+}
+
+function initTheme() {
+  const storedTheme = readStoredTheme();
+  applyTheme(storedTheme || detectSystemTheme());
+
+  if (!themeToggleEl) {
+    return;
+  }
+
+  themeToggleEl.addEventListener("click", () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme, { persist: true });
+  });
+}
 
 function normalizePath(path) {
   return String(path || "").replace(/^\/+/, "");
@@ -125,6 +188,7 @@ async function loadDatasets() {
 }
 
 async function init() {
+  initTheme();
   try {
     allDatasets = await loadDatasets();
     renderCards(allDatasets);
