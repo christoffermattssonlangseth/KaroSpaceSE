@@ -15,7 +15,7 @@
     "citation": "Goltsev, Y. et al. Deep Profiling of Mouse Splenic Architecture with CODEX Multiplexed Imaging. Cell 174, 968-981.e15 (2018)."
   },
   {
-    "title": "Merfish Coronal",
+    "title": "MERFISH (coronal)",
     "description": "MERFISH coronal section dataset viewer.",
     "slug": "Merfish_coronal",
     "type": "directory",
@@ -31,7 +31,7 @@
     "citation": "Yao, Z. et al. A high-resolution transcriptomic and spatial atlas of cell types in the whole mouse brain. Nature 624, 317-332 (2023)."
   },
   {
-    "title": "Merfish Sag",
+    "title": "MERFISH (sagittal)",
     "description": "MERFISH sagittal section dataset viewer.",
     "slug": "Merfish_sag",
     "type": "directory",
@@ -47,7 +47,7 @@
     "citation": "Yao, Z. et al. A high-resolution transcriptomic and spatial atlas of cell types in the whole mouse brain. Nature 624, 317-332 (2023)."
   },
   {
-    "title": "cosmx",
+    "title": "CosMx",
     "description": "Single-file KaroSpace viewer.",
     "slug": "cosmx",
     "type": "single",
