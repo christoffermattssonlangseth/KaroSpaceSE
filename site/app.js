@@ -23,19 +23,23 @@ function buildSearchText(dataset) {
   return [dataset.title, dataset.description, tags].join(" ").toLowerCase();
 }
 
-function createCard(dataset) {
+function createCard(dataset, index) {
   const clone = templateEl.content.cloneNode(true);
   const card = clone.querySelector(".card");
   const titleEl = clone.querySelector(".card__title");
+  const slugEl = clone.querySelector(".card__slug");
   const descEl = clone.querySelector(".card__description");
   const typeEl = clone.querySelector(".badge--type");
   const tagsEl = clone.querySelector(".tag-list");
   const buttonEl = clone.querySelector(".button");
 
   titleEl.textContent = dataset.title || dataset.slug;
+  slugEl.textContent = dataset.slug ? `/${dataset.slug}` : "";
   descEl.textContent = dataset.description || "No description provided.";
   typeEl.textContent = dataset.type || "unknown";
+  typeEl.dataset.type = dataset.type || "unknown";
   buttonEl.href = buildViewerUrl(dataset);
+  card.style.setProperty("--stagger", `${Math.min(index * 55, 440)}ms`);
 
   const tags = Array.isArray(dataset.tags) ? dataset.tags : [];
   tags.forEach((tag) => {
@@ -52,7 +56,7 @@ function createCard(dataset) {
 function renderCards(datasets) {
   cardsEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
-  datasets.forEach((dataset) => fragment.appendChild(createCard(dataset)));
+  datasets.forEach((dataset, index) => fragment.appendChild(createCard(dataset, index)));
   cardsEl.appendChild(fragment);
 
   const count = datasets.length;

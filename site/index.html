@@ -7,20 +7,30 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__inner">
-      <p class="eyebrow">KaroSpace</p>
-      <h1>Dataset Viewers</h1>
-      <p class="hero__text">
-        Browse and launch published KaroSpace viewers from Cloudflare R2.
+  <header class="header">
+    <div class="header__inner">
+      <div class="header__title">
+        <p class="eyebrow">KaroSpace</p>
+        <h1>Atlas Viewer Hub</h1>
+      </div>
+      <a class="header__link" href="https://viewers.karospace.se" target="_blank" rel="noopener noreferrer">
+        viewers.karospace.se
+      </a>
+    </div>
+  </header>
+
+  <section class="filter-bar">
+    <div class="filter-bar__inner">
+      <p class="intro">
+        Browse and launch published viewers hosted on Cloudflare R2.
       </p>
       <label class="search">
-        <span class="search__label">Search datasets</span>
-        <input id="searchInput" type="search" placeholder="Filter by title, description, or tags">
+        <span class="search__label">Filter datasets</span>
+        <input id="searchInput" type="search" placeholder="Search title, description, or tags">
       </label>
       <p id="resultCount" class="result-count" aria-live="polite"></p>
     </div>
-  </header>
+  </section>
 
   <main class="content">
     <section id="cards" class="cards" aria-live="polite"></section>
@@ -29,10 +39,13 @@
 
   <template id="cardTemplate">
     <article class="card">
-      <h2 class="card__title"></h2>
+      <div class="card__head">
+        <h2 class="card__title"></h2>
+        <span class="badge badge--type"></span>
+      </div>
+      <p class="card__slug"></p>
       <p class="card__description"></p>
       <div class="card__meta">
-        <span class="badge badge--type"></span>
         <div class="tag-list"></div>
       </div>
       <a class="button" target="_blank" rel="noopener noreferrer">Open viewer</a>
