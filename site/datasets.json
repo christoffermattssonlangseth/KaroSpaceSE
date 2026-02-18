@@ -110,5 +110,20 @@
     ],
     "citation": "Manno, G. L. et al. Molecular architecture of the developing mouse brain. Nature 1-5 (2021) doi:10.1038/s41586-021-03775-x.",
     "thumbnail": "thumbs/hybiss_mouse_pup.jpg"
+  },
+  {
+    "title": "CARTANA Mouse EAE",
+    "description": "Mouse EAE model dataset viewer using CARTANA technology.",
+    "slug": "cell_paper",
+    "type": "single",
+    "r2_path": "viewers/cell_paper.html",
+    "tags": [
+      "cartana",
+      "RNA",
+      "mouse",
+      "EAE",
+      "single-file"
+    ],
+    "citation": "Kukanja, P. et al. Cellular architecture of evolving neuroinflammatory lesions and multiple sclerosis pathology. Cell (2024) doi:10.1016/j.cell.2024.02.030."
   }
 ]
