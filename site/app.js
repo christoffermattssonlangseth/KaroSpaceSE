@@ -1,5 +1,5 @@
 const DATASETS_URL = "./datasets.json";
-const VIEWER_HOST = "https://viewers.yourdomain.com";
+const VIEWER_HOST = "https://viewers.karospace.se";
 
 const cardsEl = document.getElementById("cards");
 const searchEl = document.getElementById("searchInput");
