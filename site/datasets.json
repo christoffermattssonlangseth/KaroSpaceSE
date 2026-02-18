@@ -32,7 +32,7 @@
   },
   {
     "title": "Merfish Sag",
-    "description": "Externalized KaroSpace viewer for MERFISH sagittal section data.",
+    "description": "MERFISH sagittal section dataset viewer.",
     "slug": "Merfish_sag",
     "type": "directory",
     "r2_path": "viewers/Merfish_sag/index.html",
