@@ -5,7 +5,12 @@
     "slug": "CODEX",
     "type": "directory",
     "r2_path": "viewers/CODEX/index.html",
-    "tags": ["codex", "externalized", "large"]
+    "tags": [
+      "codex",
+      "externalized",
+      "large"
+    ],
+    "thumbnail": "thumbs/CODEX.jpg"
   },
   {
     "title": "Merfish Coronal",
@@ -13,7 +18,13 @@
     "slug": "Merfish_coronal",
     "type": "directory",
     "r2_path": "viewers/Merfish_coronal/index.html",
-    "tags": ["merfish", "coronal", "externalized", "large"]
+    "tags": [
+      "merfish",
+      "coronal",
+      "externalized",
+      "large"
+    ],
+    "thumbnail": "thumbs/Merfish_coronal.jpg"
   },
   {
     "title": "Merfish Sag",
@@ -21,7 +32,13 @@
     "slug": "Merfish_sag",
     "type": "directory",
     "r2_path": "viewers/Merfish_sag/index.html",
-    "tags": ["merfish", "sagittal", "externalized", "large"]
+    "tags": [
+      "merfish",
+      "sagittal",
+      "externalized",
+      "large"
+    ],
+    "thumbnail": "thumbs/Merfish_sag.jpg"
   },
   {
     "title": "cosmx",
@@ -29,6 +46,10 @@
     "slug": "cosmx",
     "type": "single",
     "r2_path": "viewers/cosmx.html",
-    "tags": ["cosmx", "single-file"]
+    "tags": [
+      "cosmx",
+      "single-file"
+    ],
+    "thumbnail": "thumbs/cosmx.jpg"
   }
 ]

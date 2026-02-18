@@ -26,7 +26,9 @@ This repository intentionally excludes large viewer exports and processed viewer
 │   └── datasets.json
 ├── scripts/
 │   ├── externalize_karospace_html.py
-│   └── upload_to_r2.py
+│   ├── upload_to_r2.py
+│   └── generate_thumbnails.py
+├── site/thumbs/ # optional local thumbnails for dataset cards
 ├── exports/      # local-only, gitignored
 ├── viewers/      # local-only, gitignored
 ├── .gitignore
@@ -83,6 +85,41 @@ python scripts/upload_to_r2.py --viewers-dir ./viewers
 ```
 
 4. Add/update entries in `site/datasets.json` so the landing page can link to new viewers.
+
+### Optional: Auto-generate dataset thumbnails
+
+Install Playwright once:
+
+```bash
+pip install playwright
+python -m playwright install chromium
+```
+
+Generate thumbnails and update `site/datasets.json` automatically:
+
+```bash
+python scripts/generate_thumbnails.py \
+  --datasets site/datasets.json \
+  --output-dir site/thumbs \
+  --viewer-host https://viewers.karospace.se \
+  --overwrite
+```
+
+This writes image files like `site/thumbs/CODEX.jpg` and sets:
+
+```json
+"thumbnail": "thumbs/CODEX.jpg"
+```
+
+If your local DNS still returns `NXDOMAIN` for `viewers.karospace.se`, run with
+temporary host override:
+
+```bash
+python scripts/generate_thumbnails.py \
+  --viewer-host https://viewers.karospace.se \
+  --host-ip 188.114.96.1 \
+  --overwrite
+```
 
 ## Add Dataset Checklist
 
