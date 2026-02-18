@@ -39,6 +39,10 @@
 
   <template id="cardTemplate">
     <article class="card">
+      <div class="card__thumb-wrap">
+        <img class="card__thumb hidden" alt="" loading="lazy">
+        <div class="card__thumb-fallback">No preview</div>
+      </div>
       <div class="card__head">
         <h2 class="card__title"></h2>
         <span class="badge badge--type"></span>

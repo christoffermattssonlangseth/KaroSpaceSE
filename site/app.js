@@ -23,15 +23,44 @@ function buildSearchText(dataset) {
   return [dataset.title, dataset.description, tags].join(" ").toLowerCase();
 }
 
-function createCard(dataset, index) {
+function normalizeThumbnailPath(path) {
+  const raw = String(path || "").trim();
+  if (!raw) {
+    return "";
+  }
+  if (
+    raw.startsWith("http://") ||
+    raw.startsWith("https://") ||
+    raw.startsWith("data:") ||
+    raw.startsWith("/")
+  ) {
+    return raw;
+  }
+  return `./${raw.replace(/^\.?\//, "")}`;
+}
+
+function createCard(dataset) {
   const clone = templateEl.content.cloneNode(true);
   const card = clone.querySelector(".card");
+  const thumbEl = clone.querySelector(".card__thumb");
   const titleEl = clone.querySelector(".card__title");
   const slugEl = clone.querySelector(".card__slug");
   const descEl = clone.querySelector(".card__description");
   const typeEl = clone.querySelector(".badge--type");
   const tagsEl = clone.querySelector(".tag-list");
   const buttonEl = clone.querySelector(".button");
+
+  const thumbnail = normalizeThumbnailPath(dataset.thumbnail);
+  if (thumbnail) {
+    thumbEl.src = thumbnail;
+    thumbEl.alt = `${dataset.title || dataset.slug || "dataset"} preview`;
+    thumbEl.classList.remove("hidden");
+    card.classList.add("has-thumb");
+    thumbEl.addEventListener("error", () => {
+      thumbEl.classList.add("hidden");
+      card.classList.remove("has-thumb");
+    });
+  }
 
   titleEl.textContent = dataset.title || dataset.slug;
   slugEl.textContent = dataset.slug ? `/${dataset.slug}` : "";
@@ -55,7 +84,7 @@ function createCard(dataset, index) {
 function renderCards(datasets) {
   cardsEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
-  datasets.forEach((dataset, index) => fragment.appendChild(createCard(dataset, index)));
+  datasets.forEach((dataset) => fragment.appendChild(createCard(dataset)));
   cardsEl.appendChild(fragment);
 
   const count = datasets.length;
