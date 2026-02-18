@@ -1,7 +1,7 @@
 [
   {
     "title": "CODEX",
-    "description": "Externalized KaroSpace viewer for CODEX data.",
+    "description": "CODEX dataset viewer.",
     "slug": "CODEX",
     "type": "directory",
     "r2_path": "viewers/CODEX/index.html",
