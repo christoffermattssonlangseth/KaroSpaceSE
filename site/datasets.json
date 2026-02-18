@@ -59,5 +59,20 @@
     ],
     "thumbnail": "thumbs/cosmx.jpg",
     "citation": "He, S. et al. High-plex imaging of RNA and proteins at subcellular resolution in fixed tissue by spatial molecular imaging. Nat. Biotechnol. 40, 1794-1806 (2022)."
+  },
+  {
+    "title": "Xenium Mouse Pup",
+    "description": "Xenium mouse pup dataset viewer.",
+    "slug": "xenium_mouse_pup",
+    "type": "directory",
+    "r2_path": "viewers/xenium_mouse_pup/index.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "mouse",
+      "pup",
+      "externalized",
+      "large"
+    ]
   }
 ]
