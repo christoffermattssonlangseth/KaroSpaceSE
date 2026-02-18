@@ -39,7 +39,6 @@ function createCard(dataset, index) {
   typeEl.textContent = dataset.type || "unknown";
   typeEl.dataset.type = dataset.type || "unknown";
   buttonEl.href = buildViewerUrl(dataset);
-  card.style.setProperty("--stagger", `${Math.min(index * 55, 440)}ms`);
 
   const tags = Array.isArray(dataset.tags) ? dataset.tags : [];
   tags.forEach((tag) => {
