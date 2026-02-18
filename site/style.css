@@ -255,6 +255,7 @@ body {
   display: grid;
   gap: 0.75rem;
   box-shadow: var(--shadow-soft);
+  cursor: pointer;
   transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
@@ -262,6 +263,12 @@ body {
   transform: translateY(-1px);
   border-color: var(--card-hover-border);
   box-shadow: var(--card-hover-shadow);
+}
+
+.card:focus-visible {
+  outline: none;
+  border-color: var(--card-hover-border);
+  box-shadow: var(--card-hover-shadow), 0 0 0 2px var(--focus-ring);
 }
 
 .card__thumb-wrap {

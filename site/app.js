@@ -10,6 +10,7 @@ const templateEl = document.getElementById("cardTemplate");
 const themeToggleEl = document.getElementById("themeToggle");
 
 let allDatasets = [];
+const INTERACTIVE_SELECTOR = "a, button, input, select, textarea, label";
 
 function readStoredTheme() {
   try {
@@ -104,6 +105,13 @@ function normalizeThumbnailPath(path) {
   return `./${raw.replace(/^\.?\//, "")}`;
 }
 
+function openViewer(url) {
+  if (!url) {
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 function createCard(dataset) {
   const clone = templateEl.content.cloneNode(true);
   const card = clone.querySelector(".card");
@@ -134,7 +142,35 @@ function createCard(dataset) {
     citationEl.textContent = dataset.citation;
     citationEl.classList.remove("hidden");
   }
-  buttonEl.href = buildViewerUrl(dataset);
+  const viewerUrl = buildViewerUrl(dataset);
+  buttonEl.href = viewerUrl;
+
+  card.setAttribute("role", "link");
+  card.setAttribute("tabindex", "0");
+  card.setAttribute(
+    "aria-label",
+    `Open viewer for ${dataset.title || dataset.slug || "dataset"}`
+  );
+
+  card.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest(INTERACTIVE_SELECTOR)) {
+      return;
+    }
+    openViewer(viewerUrl);
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.target instanceof Element && event.target.closest(INTERACTIVE_SELECTOR)) {
+      return;
+    }
+
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    openViewer(viewerUrl);
+  });
 
   const tags = Array.isArray(dataset.tags) ? dataset.tags : [];
   tags.forEach((tag) => {
