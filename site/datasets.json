@@ -7,6 +7,7 @@
     "r2_path": "viewers/CODEX/index.html",
     "tags": [
       "codex",
+      "protein",
       "externalized",
       "large"
     ],
@@ -21,6 +22,7 @@
     "r2_path": "viewers/Merfish_coronal/index.html",
     "tags": [
       "merfish",
+      "RNA",
       "coronal",
       "externalized",
       "large"
@@ -36,6 +38,7 @@
     "r2_path": "viewers/Merfish_sag/index.html",
     "tags": [
       "merfish",
+      "RNA",
       "sagittal",
       "externalized",
       "large"
@@ -51,6 +54,7 @@
     "r2_path": "viewers/cosmx.html",
     "tags": [
       "cosmx",
+      "RNA",
       "single-file"
     ],
     "thumbnail": "thumbs/cosmx.jpg",
