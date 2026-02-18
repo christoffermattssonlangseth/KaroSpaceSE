@@ -140,6 +140,7 @@
       "kidney",
       "single-file"
     ],
-    "citation": "10x Genomics. Human Kidney Preview Data: Xenium Human Multi-Tissue and Cancer Panel 1 Standard. https://www.10xgenomics.com/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard"
+    "citation": "10x Genomics. Human Kidney Preview Data: Xenium Human Multi-Tissue and Cancer Panel 1 Standard. https://www.10xgenomics.com/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard",
+    "thumbnail": "thumbs/xenium_human_kidney.jpg"
   }
 ]
