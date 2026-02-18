@@ -126,5 +126,20 @@
     ],
     "citation": "Kukanja, P. et al. Cellular architecture of evolving neuroinflammatory lesions and multiple sclerosis pathology. Cell (2024) doi:10.1016/j.cell.2024.02.030.",
     "thumbnail": "thumbs/cell_paper.jpg"
+  },
+  {
+    "title": "Xenium Human Kidney",
+    "description": "Human kidney preview dataset viewer using Xenium technology.",
+    "slug": "xenium_human_kidney",
+    "type": "single",
+    "r2_path": "viewers/xenium_human_kidney.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "kidney",
+      "single-file"
+    ],
+    "citation": "10x Genomics. Human Kidney Preview Data: Xenium Human Multi-Tissue and Cancer Panel 1 Standard. https://www.10xgenomics.com/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard"
   }
 ]
