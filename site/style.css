@@ -48,7 +48,7 @@ body {
   min-height: 80px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1.2rem;
 }
 
@@ -66,23 +66,6 @@ body {
   letter-spacing: 0.12em;
   font-weight: 700;
   color: var(--accent);
-}
-
-.header__link {
-  border: 1px solid var(--border-color);
-  background: var(--panel-bg);
-  border-radius: 8px;
-  padding: 0.5rem 0.78rem;
-  color: var(--text-color);
-  text-decoration: none;
-  font-size: 0.86rem;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.header__link:hover {
-  background: var(--hover-bg);
-  border-color: var(--accent-strong);
-  color: var(--accent-strong);
 }
 
 .filter-bar {
@@ -317,10 +300,6 @@ body {
     padding: 0.8rem 0;
     align-items: flex-start;
     flex-direction: column;
-  }
-
-  .header__link {
-    font-size: 0.76rem;
   }
 
   .content {
