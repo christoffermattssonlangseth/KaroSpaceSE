@@ -74,7 +74,8 @@
       "externalized",
       "large"
     ],
-    "thumbnail": "thumbs/xenium_mouse_pup.jpg"
+    "thumbnail": "thumbs/xenium_mouse_pup.jpg",
+    "citation": "10x Genomics. Mouse Pup Preview Data: Xenium Mouse Tissue Atlassing Panel 1 Standard. https://www.10xgenomics.com/datasets/mouse-pup-preview-data-xenium-mouse-tissue-atlassing-panel-1-standard"
   },
   {
     "title": "Xenium Human Pancreas (Adenocarcinoma)",
@@ -90,6 +91,7 @@
       "adenocarcinoma",
       "externalized",
       "large"
-    ]
+    ],
+    "thumbnail": "thumbs/xenium_adenocarcinoma.jpg"
   }
 ]
