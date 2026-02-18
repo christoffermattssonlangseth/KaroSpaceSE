@@ -10,7 +10,8 @@
       "externalized",
       "large"
     ],
-    "thumbnail": "thumbs/CODEX.jpg"
+    "thumbnail": "thumbs/CODEX.jpg",
+    "citation": "Goltsev, Y. et al. Deep Profiling of Mouse Splenic Architecture with CODEX Multiplexed Imaging. Cell 174, 968-981.e15 (2018)."
   },
   {
     "title": "Merfish Coronal",
@@ -24,7 +25,8 @@
       "externalized",
       "large"
     ],
-    "thumbnail": "thumbs/Merfish_coronal.jpg"
+    "thumbnail": "thumbs/Merfish_coronal.jpg",
+    "citation": "Yao, Z. et al. A high-resolution transcriptomic and spatial atlas of cell types in the whole mouse brain. Nature 624, 317-332 (2023)."
   },
   {
     "title": "Merfish Sag",
@@ -38,7 +40,8 @@
       "externalized",
       "large"
     ],
-    "thumbnail": "thumbs/Merfish_sag.jpg"
+    "thumbnail": "thumbs/Merfish_sag.jpg",
+    "citation": "Yao, Z. et al. A high-resolution transcriptomic and spatial atlas of cell types in the whole mouse brain. Nature 624, 317-332 (2023)."
   },
   {
     "title": "cosmx",
@@ -50,6 +53,7 @@
       "cosmx",
       "single-file"
     ],
-    "thumbnail": "thumbs/cosmx.jpg"
+    "thumbnail": "thumbs/cosmx.jpg",
+    "citation": "He, S. et al. High-plex imaging of RNA and proteins at subcellular resolution in fixed tissue by spatial molecular imaging. Nat. Biotechnol. 40, 1794-1806 (2022)."
   }
 ]

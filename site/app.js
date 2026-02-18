@@ -20,7 +20,9 @@ function buildViewerUrl(dataset) {
 
 function buildSearchText(dataset) {
   const tags = Array.isArray(dataset.tags) ? dataset.tags.join(" ") : "";
-  return [dataset.title, dataset.description, tags].join(" ").toLowerCase();
+  return [dataset.title, dataset.description, dataset.citation, tags]
+    .join(" ")
+    .toLowerCase();
 }
 
 function normalizeThumbnailPath(path) {
@@ -46,6 +48,7 @@ function createCard(dataset) {
   const titleEl = clone.querySelector(".card__title");
   const slugEl = clone.querySelector(".card__slug");
   const descEl = clone.querySelector(".card__description");
+  const citationEl = clone.querySelector(".card__citation");
   const typeEl = clone.querySelector(".badge--type");
   const tagsEl = clone.querySelector(".tag-list");
   const buttonEl = clone.querySelector(".button");
@@ -65,6 +68,10 @@ function createCard(dataset) {
   titleEl.textContent = dataset.title || dataset.slug;
   slugEl.textContent = dataset.slug ? `/${dataset.slug}` : "";
   descEl.textContent = dataset.description || "No description provided.";
+  if (dataset.citation) {
+    citationEl.textContent = dataset.citation;
+    citationEl.classList.remove("hidden");
+  }
   typeEl.textContent = dataset.type || "unknown";
   typeEl.dataset.type = dataset.type || "unknown";
   buttonEl.href = buildViewerUrl(dataset);

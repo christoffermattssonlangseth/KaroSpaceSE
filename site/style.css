@@ -231,6 +231,17 @@ body {
   line-height: 1.45;
 }
 
+.card__citation {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.42;
+  color: #5b4c56;
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #eadde6;
+  background: #fdf9fc;
+}
+
 .card__meta {
   display: grid;
   gap: 0.5rem;
