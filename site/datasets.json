@@ -75,5 +75,21 @@
       "large"
     ],
     "thumbnail": "thumbs/xenium_mouse_pup.jpg"
+  },
+  {
+    "title": "Xenium Human Pancreas (Adenocarcinoma)",
+    "description": "Human pancreas with adenocarcinoma Xenium dataset viewer.",
+    "slug": "xenium_adenocarcinoma",
+    "type": "directory",
+    "r2_path": "viewers/xenium_adenocarcinoma/index.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "pancreas",
+      "adenocarcinoma",
+      "externalized",
+      "large"
+    ]
   }
 ]
