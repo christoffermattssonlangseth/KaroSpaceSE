@@ -102,6 +102,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Run browser in headed mode for debugging.",
     )
+    parser.add_argument(
+        "--theme",
+        choices=["auto", "light", "dark"],
+        default="auto",
+        help="Force viewer theme during capture (default: auto).",
+    )
     return parser.parse_args()
 
 
@@ -187,6 +193,8 @@ def run() -> int:
     print(f"Datasets selected: {len(targets)}")
     print(f"Output directory: {output_dir}")
     print(f"Viewer host: {viewer_host}")
+    if args.theme != "auto":
+        print(f"Capture theme: {args.theme}")
 
     if args.dry_run:
         for _, slug, url, thumb_path, thumb_rel in targets:
@@ -221,10 +229,33 @@ def run() -> int:
             headless=not args.headed,
             args=launch_args,
         )
-        context = browser.new_context(
-            viewport={"width": args.width, "height": args.height},
-            ignore_https_errors=args.ignore_https_errors,
-        )
+        context_kwargs: dict = {
+            "viewport": {"width": args.width, "height": args.height},
+            "ignore_https_errors": args.ignore_https_errors,
+        }
+        if args.theme in {"light", "dark"}:
+            context_kwargs["color_scheme"] = args.theme
+
+        context = browser.new_context(**context_kwargs)
+
+        if args.theme in {"light", "dark"}:
+            forced_theme = json.dumps(args.theme)
+            context.add_init_script(
+                f"""
+(() => {{
+  const theme = {forced_theme};
+  try {{
+    localStorage.setItem("spatial-viewer-theme", theme);
+    localStorage.setItem("karospace-theme", theme);
+  }} catch (_err) {{}}
+  try {{
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  }} catch (_err) {{}}
+}})();
+"""
+            )
 
         for dataset, slug, url, thumb_path, thumb_rel in targets:
             if thumb_path.exists() and not args.overwrite:
