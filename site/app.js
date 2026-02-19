@@ -109,7 +109,10 @@ function openViewer(url) {
   if (!url) {
     return;
   }
-  window.open(url, "_blank", "noopener,noreferrer");
+  const popup = window.open(url, "_blank", "noopener,noreferrer");
+  if (!popup) {
+    window.location.assign(url);
+  }
 }
 
 function createCard(dataset) {
