@@ -529,6 +529,14 @@ def replacement_for_candidate(candidate: BlobCandidate, blob_key: str) -> str:
     raise ValueError(f"Unsupported candidate detector '{candidate.detector}'")
 
 
+def should_externalize_candidate(candidate: BlobCandidate) -> bool:
+    # Keep tiny mutable JS state (e.g. [] / {}) inline; externalizing these can
+    # unintentionally share the same array/object across calls.
+    if candidate.detector == "js_assignment" and candidate.payload_bytes <= 2:
+        return False
+    return True
+
+
 def apply_replacements(html: str, replacements: list[Replacement]) -> str:
     updated = html
     for repl in sorted(replacements, key=lambda r: r.start, reverse=True):
@@ -613,6 +621,9 @@ def externalize_to_directory(
     chunk_counter = 0
 
     for idx, candidate in enumerate(candidates):
+        if not should_externalize_candidate(candidate):
+            continue
+
         blob_key = f"blob_{idx:03d}"
         if isinstance(candidate.value, list):
             chunk_entries, chunk_counter, strategy = write_array_chunks(
