@@ -89,6 +89,15 @@ def content_type_for(path: Path) -> str:
     return guessed or "application/octet-stream"
 
 
+def cache_control_for(path: Path) -> str:
+    ext = path.suffix.lower()
+    if ext == ".html":
+        return "public, max-age=300, stale-while-revalidate=86400"
+    if ext in {".json", ".txt", ".js", ".css", ".png", ".jpg", ".jpeg", ".svg"}:
+        return "public, max-age=31536000, immutable"
+    return "public, max-age=86400"
+
+
 def build_key(prefix: str, viewers_dir: Path, file_path: Path) -> str:
     relative = file_path.relative_to(viewers_dir).as_posix()
     cleaned_prefix = prefix.strip("/ ")
@@ -145,20 +154,28 @@ def run() -> int:
         for file_path in files:
             key = build_key(prefix, viewers_dir, file_path)
             ctype = content_type_for(file_path)
-            print(f"DRY RUN upload: {file_path} -> s3://{bucket}/{key} ({ctype})")
+            ccache = cache_control_for(file_path)
+            print(
+                f"DRY RUN upload: {file_path} -> s3://{bucket}/{key} "
+                f"({ctype}, Cache-Control={ccache})"
+            )
             uploaded_urls.append(f"{public_base}/{key}")
     else:
         s3_client = build_s3_client(access_key, secret_key, account_id)
         for file_path in files:
             key = build_key(prefix, viewers_dir, file_path)
             ctype = content_type_for(file_path)
+            ccache = cache_control_for(file_path)
             s3_client.upload_file(
                 str(file_path),
                 bucket,
                 key,
-                ExtraArgs={"ContentType": ctype},
+                ExtraArgs={"ContentType": ctype, "CacheControl": ccache},
             )
-            print(f"Uploaded: {file_path} -> s3://{bucket}/{key} ({ctype})")
+            print(
+                f"Uploaded: {file_path} -> s3://{bucket}/{key} "
+                f"({ctype}, Cache-Control={ccache})"
+            )
             uploaded_urls.append(f"{public_base}/{key}")
 
     print("")

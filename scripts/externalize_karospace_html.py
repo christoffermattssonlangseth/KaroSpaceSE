@@ -509,10 +509,8 @@ def replacement_for_candidate(candidate: BlobCandidate, blob_key: str) -> str:
             "<script>\n"
             "(function () {\n"
             f"  var __kData = window.__KAROSPACE_DATA_LOADER__.getSync({json.dumps(blob_key)});\n"
-            f"  var __kNode = document.getElementById({json.dumps(candidate.script_id)});\n"
-            "  if (__kNode) {\n"
-            "    __kNode.textContent = JSON.stringify(__kData);\n"
-            "  }\n"
+            "  window.__KAROSPACE_DATA__ = window.__KAROSPACE_DATA__ || {};\n"
+            f"  window.__KAROSPACE_DATA__[{json.dumps(candidate.script_id)}] = __kData;\n"
             "})();\n"
             "</script>"
         )
@@ -535,6 +533,28 @@ def apply_replacements(html: str, replacements: list[Replacement]) -> str:
     updated = html
     for repl in sorted(replacements, key=lambda r: r.start, reverse=True):
         updated = updated[: repl.start] + repl.text + updated[repl.end :]
+    return updated
+
+
+def rewrite_script_json_consumers(
+    html: str,
+    script_json_mappings: list[tuple[str, str]],
+) -> str:
+    updated = html
+    for script_id, _blob_key in script_json_mappings:
+        sid = json.dumps(script_id)
+        pattern = re.compile(
+            r"JSON\.parse\(\s*document\.getElementById\(\s*(['\"])"
+            + re.escape(script_id)
+            + r"\1\s*\)\.textContent\s*\)"
+        )
+        replacement = (
+            "(window.__KAROSPACE_DATA__ && "
+            f"Object.prototype.hasOwnProperty.call(window.__KAROSPACE_DATA__, {sid})"
+            f" ? window.__KAROSPACE_DATA__[{sid}]"
+            f" : JSON.parse(document.getElementById({sid}).textContent))"
+        )
+        updated = pattern.sub(replacement, updated)
     return updated
 
 
@@ -589,6 +609,7 @@ def externalize_to_directory(
     }
 
     replacements: list[Replacement] = []
+    script_json_mappings: list[tuple[str, str]] = []
     chunk_counter = 0
 
     for idx, candidate in enumerate(candidates):
@@ -623,8 +644,11 @@ def externalize_to_directory(
                 text=replacement_for_candidate(candidate, blob_key),
             )
         )
+        if candidate.detector == "script_json" and candidate.script_id:
+            script_json_mappings.append((candidate.script_id, blob_key))
 
     index_html = apply_replacements(html, replacements)
+    index_html = rewrite_script_json_consumers(index_html, script_json_mappings)
     index_html = ensure_loader_runtime(index_html)
 
     manifest_path = viewer_dir / "manifest.json"
