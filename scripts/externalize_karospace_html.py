@@ -496,6 +496,219 @@ def ensure_loader_runtime(html: str) -> str:
     return loader_script + "\n" + html
 
 
+def ensure_standalone_download_button(html: str, slug: str) -> str:
+    marker = "KAROSPACE_STANDALONE_EXPORT_BUTTON"
+
+    button_script = """
+<script>
+/* KAROSPACE_STANDALONE_EXPORT_BUTTON */
+(function () {
+  var DEFAULT_SLUG = __DEFAULT_SLUG__;
+
+  function escapeForInlineScript(text) {
+    return text
+      .replace(/<\\/script/gi, "<\\\\/script")
+      .replace(/<!--/g, "<\\\\!--");
+  }
+
+  function buildPreloadScript(payloadJsonText) {
+    return [
+      "<script>",
+      "/* KAROSPACE_STANDALONE_BLOB_PRELOAD */",
+      "(function () {",
+      "  var payload = " + payloadJsonText + ";",
+      "  var install = function () {",
+      "    var loader = window.__KAROSPACE_DATA_LOADER__;",
+      "    if (!loader) return;",
+      "    var manifest = payload.manifest || { blobs: [] };",
+      "    var blobs = payload.blobs || {};",
+      "    var originalGetManifestSync = typeof loader.getManifestSync === 'function' ? loader.getManifestSync.bind(loader) : null;",
+      "    var originalGetManifestAsync = typeof loader.getManifestAsync === 'function' ? loader.getManifestAsync.bind(loader) : null;",
+      "    var originalGetSync = typeof loader.getSync === 'function' ? loader.getSync.bind(loader) : null;",
+      "    var originalGetAsync = typeof loader.getAsync === 'function' ? loader.getAsync.bind(loader) : null;",
+      "    loader._cache = loader._cache || {};",
+      "    loader._blobPromises = loader._blobPromises || {};",
+      "    loader._manifest = manifest;",
+      "    loader._manifestPromise = Promise.resolve(manifest);",
+      "    loader._manifestIndex = {};",
+      "    var manifestBlobs = Array.isArray(manifest.blobs) ? manifest.blobs : [];",
+      "    for (var i = 0; i < manifestBlobs.length; i += 1) {",
+      "      var blob = manifestBlobs[i];",
+      "      if (blob && blob.key) loader._manifestIndex[blob.key] = blob;",
+      "    }",
+      "    window.__KAROSPACE_DATA__ = window.__KAROSPACE_DATA__ || {};",
+      "    Object.keys(blobs).forEach(function (key) {",
+      "      loader._cache[key] = blobs[key];",
+      "      window.__KAROSPACE_DATA__[key] = blobs[key];",
+      "    });",
+      "    loader.getManifestSync = function () {",
+      "      if (manifest) return manifest;",
+      "      if (originalGetManifestSync) return originalGetManifestSync();",
+      "      return { blobs: [] };",
+      "    };",
+      "    loader.getManifestAsync = function () {",
+      "      if (manifest) return Promise.resolve(manifest);",
+      "      if (originalGetManifestAsync) return originalGetManifestAsync();",
+      "      return Promise.resolve({ blobs: [] });",
+      "    };",
+      "    loader.getSync = function (key) {",
+      "      if (Object.prototype.hasOwnProperty.call(loader._cache, key)) {",
+      "        return loader._cache[key];",
+      "      }",
+      "      if (originalGetSync) return originalGetSync(key);",
+      "      throw new Error('Blob not found in standalone bundle: ' + key);",
+      "    };",
+      "    loader.getAsync = function (key) {",
+      "      if (Object.prototype.hasOwnProperty.call(loader._cache, key)) {",
+      "        return Promise.resolve(loader._cache[key]);",
+      "      }",
+      "      if (originalGetAsync) return originalGetAsync(key);",
+      "      return Promise.reject(new Error('Blob not found in standalone bundle: ' + key));",
+      "    };",
+      "  };",
+      "  install();",
+      "})();",
+      "<\\\\/script>"
+    ].join("\\n");
+  }
+
+  function injectPreloadScript(indexHtml, preloadScript) {
+    if (indexHtml.indexOf("KAROSPACE_STANDALONE_BLOB_PRELOAD") !== -1) {
+      return indexHtml;
+    }
+    if (/<\\/head>/i.test(indexHtml)) {
+      return indexHtml.replace(/<\\/head>/i, preloadScript + "\\n</head>");
+    }
+    if (/<\\/body>/i.test(indexHtml)) {
+      return indexHtml.replace(/<\\/body>/i, preloadScript + "\\n</body>");
+    }
+    return preloadScript + "\\n" + indexHtml;
+  }
+
+  function downloadFilename() {
+    var slug = (DEFAULT_SLUG || "").trim();
+    if (!slug) {
+      var path = (window.location.pathname || "").replace(/\\/+$/, "");
+      slug = path.split("/").pop() || "karospace-viewer";
+    }
+    slug = slug.replace(/[^A-Za-z0-9._-]+/g, "_");
+    return slug + "-standalone.html";
+  }
+
+  async function buildStandaloneHtml() {
+    var loader = window.__KAROSPACE_DATA_LOADER__;
+    if (!loader || typeof loader.getManifestAsync !== "function") {
+      throw new Error("KaroSpace loader is not available.");
+    }
+
+    var manifest = await loader.getManifestAsync();
+    var blobEntries = manifest && Array.isArray(manifest.blobs) ? manifest.blobs : [];
+    var embedded = {};
+    for (var i = 0; i < blobEntries.length; i += 1) {
+      var key = blobEntries[i] && blobEntries[i].key;
+      if (!key) continue;
+      embedded[key] = await loader.getAsync(key);
+    }
+
+    var sourceUrl = new URL("index.html", window.location.href);
+    var response = await fetch(sourceUrl.toString(), { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error("Failed to read source index.html (" + response.status + ")");
+    }
+    var indexHtml = await response.text();
+    var payload = JSON.stringify({ manifest: manifest, blobs: embedded });
+    var preloadScript = buildPreloadScript(escapeForInlineScript(payload));
+    return injectPreloadScript(indexHtml, preloadScript);
+  }
+
+  async function handleDownload(button) {
+    var originalLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = "Bundling...";
+    try {
+      var standaloneHtml = await buildStandaloneHtml();
+      var output = new Blob([standaloneHtml], { type: "text/html;charset=utf-8" });
+      var blobUrl = URL.createObjectURL(output);
+      var link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = downloadFilename();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () {
+        URL.revokeObjectURL(blobUrl);
+      }, 1000);
+    } finally {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
+  }
+
+  function mountButton() {
+    if (document.getElementById("download-standalone-btn")) {
+      return;
+    }
+
+    var button = document.createElement("button");
+    button.id = "download-standalone-btn";
+    button.className = "graph-toggle";
+    button.type = "button";
+    button.textContent = "Download HTML";
+    button.title = "Download this viewer as a standalone HTML file";
+    button.addEventListener("click", function () {
+      handleDownload(button).catch(function (error) {
+        console.error(error);
+        alert("Failed to build standalone HTML: " + (error && error.message ? error.message : error));
+      });
+    });
+
+    var controls = document.querySelector(".controls");
+    if (controls) {
+      var screenshotBtn = controls.querySelector("#screenshot-btn");
+      if (screenshotBtn && screenshotBtn.parentNode === controls) {
+        controls.insertBefore(button, screenshotBtn.nextSibling);
+      } else {
+        controls.appendChild(button);
+      }
+      return;
+    }
+
+    var fallback = document.querySelector(".header") || document.body;
+    fallback.appendChild(button);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mountButton, { once: true });
+  } else {
+    mountButton();
+  }
+})();
+</script>
+""".strip()
+
+    button_script = button_script.replace("__DEFAULT_SLUG__", json.dumps(slug))
+
+    if marker in html:
+        existing_block_re = re.compile(
+            r"(?is)<script>\s*/\*\s*KAROSPACE_STANDALONE_EXPORT_BUTTON\s*\*/.*?</script>"
+        )
+        if existing_block_re.search(html):
+            return existing_block_re.sub(button_script, html, count=1)
+        return html
+
+    head_close = re.search(r"(?is)</head>", html)
+    if head_close:
+        idx = head_close.start()
+        return html[:idx] + "\n" + button_script + "\n" + html[idx:]
+
+    body_close = re.search(r"(?is)</body>", html)
+    if body_close:
+        idx = body_close.start()
+        return html[:idx] + "\n" + button_script + "\n" + html[idx:]
+
+    return html + "\n" + button_script + "\n"
+
+
 def replacement_for_candidate(candidate: BlobCandidate, blob_key: str) -> str:
     if candidate.detector == "script_json":
         attrs = candidate.script_attrs or ""
@@ -661,6 +874,7 @@ def externalize_to_directory(
     index_html = apply_replacements(html, replacements)
     index_html = rewrite_script_json_consumers(index_html, script_json_mappings)
     index_html = ensure_loader_runtime(index_html)
+    index_html = ensure_standalone_download_button(index_html, slug)
 
     manifest_path = viewer_dir / "manifest.json"
     index_path = viewer_dir / "index.html"
