@@ -1,5 +1,21 @@
 [
   {
+    "title": "DBiT Multiome",
+    "description": "DBiT multiome dataset viewer with RNA and ATAC modalities.",
+    "slug": "dbit_multiome",
+    "type": "directory",
+    "r2_path": "viewers/dbit_multiome/index.html",
+    "tags": [
+      "DBiT",
+      "RNA",
+      "ATAC",
+      "multiome",
+      "externalized",
+      "large"
+    ],
+    "citation": "Zhang, D. et al. Spatial dynamics of brain development and neuroinflammation. Nature 647, 213-227 (2025)."
+  },
+  {
     "title": "CODEX",
     "description": "CODEX dataset viewer.",
     "slug": "CODEX",
