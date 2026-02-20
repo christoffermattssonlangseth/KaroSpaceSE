@@ -506,14 +506,12 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
   var DEFAULT_SLUG = __DEFAULT_SLUG__;
 
   function escapeForInlineScript(text) {
-    return text
-      .replace(/<\\/script/gi, "<\\\\/script")
-      .replace(/<!--/g, "<\\\\!--");
+    var scriptClosePattern = /<\\/script/gi;
+    return text.replace(scriptClosePattern, "<\\\\/script");
   }
 
   function buildPreloadScript(payloadJsonText) {
     return [
-      "<script>",
       "/* KAROSPACE_STANDALONE_BLOB_PRELOAD */",
       "(function () {",
       "  var payload = " + payloadJsonText + ";",
@@ -567,20 +565,26 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
       "    };",
       "  };",
       "  install();",
-      "})();",
-      "<\\\\/script>"
+      "})();"
     ].join("\\n");
   }
 
-  function injectPreloadScript(indexHtml, preloadScript) {
-    if (indexHtml.indexOf("KAROSPACE_STANDALONE_BLOB_PRELOAD") !== -1) {
+  function injectPreloadScript(indexHtml, preloadJs) {
+    var existingPreload = /<script[^>]*>\\s*\\/\\*\\s*KAROSPACE_STANDALONE_BLOB_PRELOAD\\s*\\*\\//i;
+    if (existingPreload.test(indexHtml)) {
       return indexHtml;
     }
-    if (/<\\/head>/i.test(indexHtml)) {
-      return indexHtml.replace(/<\\/head>/i, preloadScript + "\\n</head>");
+    var openScript = "<" + "script>";
+    var closeScript = "<" + "/script>";
+    var preloadScript = openScript + "\\n" + preloadJs + "\\n" + closeScript;
+    var lower = indexHtml.toLowerCase();
+    var headPos = lower.lastIndexOf("</head>");
+    if (headPos !== -1) {
+      return indexHtml.slice(0, headPos) + preloadScript + "\\n" + indexHtml.slice(headPos);
     }
-    if (/<\\/body>/i.test(indexHtml)) {
-      return indexHtml.replace(/<\\/body>/i, preloadScript + "\\n</body>");
+    var bodyPos = lower.lastIndexOf("</body>");
+    if (bodyPos !== -1) {
+      return indexHtml.slice(0, bodyPos) + preloadScript + "\\n" + indexHtml.slice(bodyPos);
     }
     return preloadScript + "\\n" + indexHtml;
   }
@@ -595,7 +599,66 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
     return slug + "-standalone.html";
   }
 
-  async function buildStandaloneHtml() {
+  function toStandaloneSafe(value) {
+    var seen = new WeakSet();
+    var jsonText = JSON.stringify(value, function (_key, current) {
+      if (typeof current === "function") {
+        return undefined;
+      }
+      if (current && typeof current === "object") {
+        if (seen.has(current)) {
+          return undefined;
+        }
+        seen.add(current);
+
+        if (
+          (typeof Element !== "undefined" && current instanceof Element) ||
+          (typeof Window !== "undefined" && current instanceof Window) ||
+          current === window ||
+          current === document
+        ) {
+          return undefined;
+        }
+      }
+      return current;
+    });
+    return JSON.parse(jsonText);
+  }
+
+  function reconstructFromManifestBlob(blob, chunkTexts) {
+    if (blob && blob.strategy === "array_slices") {
+      var merged = [];
+      for (var i = 0; i < chunkTexts.length; i += 1) {
+        var arr = JSON.parse(chunkTexts[i]);
+        if (!Array.isArray(arr)) {
+          throw new Error("Expected array chunk for " + blob.key);
+        }
+        merged = merged.concat(arr);
+      }
+      return merged;
+    }
+    if (blob && blob.strategy === "text_concat") {
+      return JSON.parse(chunkTexts.join(""));
+    }
+    throw new Error("Unsupported chunk strategy: " + (blob && blob.strategy));
+  }
+
+  async function readBlobFromManifest(blob) {
+    var chunks = blob && Array.isArray(blob.chunks) ? blob.chunks : [];
+    var chunkTexts = await Promise.all(
+      chunks.map(function (chunk) {
+        return fetch("./" + chunk.path).then(function (response) {
+          if (!response.ok) {
+            throw new Error("Failed to load " + chunk.path + " (" + response.status + ")");
+          }
+          return response.text();
+        });
+      })
+    );
+    return reconstructFromManifestBlob(blob, chunkTexts);
+  }
+
+  async function buildExternalizedStandaloneHtml() {
     var loader = window.__KAROSPACE_DATA_LOADER__;
     if (!loader || typeof loader.getManifestAsync !== "function") {
       throw new Error("KaroSpace loader is not available.");
@@ -605,9 +668,11 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
     var blobEntries = manifest && Array.isArray(manifest.blobs) ? manifest.blobs : [];
     var embedded = {};
     for (var i = 0; i < blobEntries.length; i += 1) {
-      var key = blobEntries[i] && blobEntries[i].key;
+      var blob = blobEntries[i];
+      var key = blob && blob.key;
       if (!key) continue;
-      embedded[key] = await loader.getAsync(key);
+      var pristineValue = await readBlobFromManifest(blob);
+      embedded[key] = toStandaloneSafe(pristineValue);
     }
 
     var sourceUrl = new URL("index.html", window.location.href);
@@ -621,12 +686,54 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
     return injectPreloadScript(indexHtml, preloadScript);
   }
 
+  function buildDoctypePrefix() {
+    var dt = document.doctype;
+    if (!dt) {
+      return "<!DOCTYPE html>\\n";
+    }
+    var text = "<!DOCTYPE " + dt.name;
+    if (dt.publicId) {
+      text += ' PUBLIC "' + dt.publicId + '"';
+    } else if (dt.systemId) {
+      text += " SYSTEM";
+    }
+    if (dt.systemId) {
+      text += ' "' + dt.systemId + '"';
+    }
+    text += ">\\n";
+    return text;
+  }
+
+  async function buildSingleFileDownloadHtml() {
+    try {
+      var response = await fetch(window.location.href, { cache: "no-store" });
+      if (response.ok) {
+        var source = await response.text();
+        if (source && /<html/i.test(source)) {
+          return source;
+        }
+      }
+    } catch (_error) {
+      // file:// scheme and strict browser policies can block fetch; fall back to DOM snapshot.
+    }
+    return buildDoctypePrefix() + document.documentElement.outerHTML;
+  }
+
+  async function buildDownloadHtml() {
+    var loader = window.__KAROSPACE_DATA_LOADER__;
+    var isExternalized = !!(loader && typeof loader.getManifestAsync === "function");
+    if (isExternalized) {
+      return buildExternalizedStandaloneHtml();
+    }
+    return buildSingleFileDownloadHtml();
+  }
+
   async function handleDownload(button) {
     var originalLabel = button.textContent;
     button.disabled = true;
     button.textContent = "Bundling...";
     try {
-      var standaloneHtml = await buildStandaloneHtml();
+      var standaloneHtml = await buildDownloadHtml();
       var output = new Blob([standaloneHtml], { type: "text/html;charset=utf-8" });
       var blobUrl = URL.createObjectURL(output);
       var link = document.createElement("a");
@@ -693,7 +800,7 @@ def ensure_standalone_download_button(html: str, slug: str) -> str:
             r"(?is)<script>\s*/\*\s*KAROSPACE_STANDALONE_EXPORT_BUTTON\s*\*/.*?</script>"
         )
         if existing_block_re.search(html):
-            return existing_block_re.sub(button_script, html, count=1)
+            return existing_block_re.sub(lambda _m: button_script, html, count=1)
         return html
 
     head_close = re.search(r"(?is)</head>", html)
@@ -794,7 +901,10 @@ def copy_single(input_path: Path, outdir: Path, slug: str) -> Path:
     if input_path.resolve() == target.resolve():
         raise ValueError("Input and output are the same file path.")
 
-    shutil.copy2(input_path, target)
+    html = input_path.read_text(encoding="utf-8")
+    html = ensure_standalone_download_button(html, slug)
+    target.write_text(html, encoding="utf-8")
+    shutil.copystat(input_path, target)
     return target
 
 
