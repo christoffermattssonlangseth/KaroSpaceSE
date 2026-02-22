@@ -159,5 +159,21 @@
     ],
     "citation": "10x Genomics. Human Kidney Preview Data: Xenium Human Multi-Tissue and Cancer Panel 1 Standard. https://www.10xgenomics.com/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard",
     "thumbnail": "thumbs/xenium_human_kidney.jpg"
+  },
+  {
+    "title": "Xenium Fetal Lung",
+    "description": "Xenium fetal lung dataset viewer for acute neonatal lung injury across development and disease severity.",
+    "slug": "xenium_fetal_lung",
+    "type": "single",
+    "r2_path": "viewers/xenium_fetal_lung.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "fetal lung",
+      "lung injury",
+      "single-file"
+    ],
+    "citation": "Mallapragada, S. et al. A spatial transcriptomic atlas of acute neonatal lung injury across development and disease severity. Am. J. Physiol.-Lung Cell. Mol. Physiol. 329, L376-L388 (2025)."
   }
 ]
