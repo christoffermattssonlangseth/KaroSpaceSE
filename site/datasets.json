@@ -164,15 +164,16 @@
     "title": "Xenium Fetal Lung",
     "description": "Xenium fetal lung dataset viewer for acute neonatal lung injury across development and disease severity.",
     "slug": "xenium_fetal_lung",
-    "type": "single",
-    "r2_path": "viewers/xenium_fetal_lung.html",
+    "type": "directory",
+    "r2_path": "viewers/xenium_fetal_lung/index.html",
     "tags": [
       "xenium",
       "RNA",
       "human",
       "fetal lung",
       "lung injury",
-      "single-file"
+      "externalized",
+      "large"
     ],
     "citation": "Frum, T. et al. Clinical Interventions and Inflammatory Signaling Shape the Transcriptional and Cellular Architecture of the Early Postnatal Lung. bioRxiv 2025.10.17.683116 (2025) doi:10.1101/2025.10.17.683116. https://pmc.ncbi.nlm.nih.gov/articles/PMC12633012/",
     "thumbnail": "thumbs/xenium_fetal_lung.jpg"
