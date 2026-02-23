@@ -177,5 +177,21 @@
     ],
     "citation": "Frum, T. et al. Clinical Interventions and Inflammatory Signaling Shape the Transcriptional and Cellular Architecture of the Early Postnatal Lung. bioRxiv 2025.10.17.683116 (2025) doi:10.1101/2025.10.17.683116. https://pmc.ncbi.nlm.nih.gov/articles/PMC12633012/",
     "thumbnail": "thumbs/xenium_fetal_lung.jpg"
+  },
+  {
+    "title": "Xenium Human Lung Fibrosis",
+    "description": "Xenium dataset from human fibrotic lung tissue.",
+    "slug": "xenium_human_lung_fibrosis",
+    "type": "single",
+    "r2_path": "viewers/xenium_human_lung_fibrosis.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "lung",
+      "fibrosis",
+      "single-file"
+    ],
+    "citation": "Vannan, A. et al. Spatial transcriptomics identifies molecular niche dysregulation associated with distal lung remodeling in pulmonary fibrosis. Nat. Genet. 57, 647-658 (2025)."
   }
 ]
