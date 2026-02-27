@@ -93,6 +93,10 @@ def cache_control_for(path: Path) -> str:
     ext = path.suffix.lower()
     if ext == ".html":
         return "public, max-age=300, stale-while-revalidate=86400"
+    if path.name == "manifest.json":
+        return "public, max-age=300, stale-while-revalidate=86400"
+    if path.parent.name == "data" and path.name.startswith("chunk_") and ext in {".json", ".txt"}:
+        return "public, max-age=300, stale-while-revalidate=86400"
     if ext in {".json", ".txt", ".js", ".css", ".png", ".jpg", ".jpeg", ".svg"}:
         return "public, max-age=31536000, immutable"
     return "public, max-age=86400"
