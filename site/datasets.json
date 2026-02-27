@@ -214,6 +214,25 @@
     "thumbnail": "thumbs/human_lung_regions.jpg"
   },
   {
+    "title": "Visium HD 3' Gene Expression Library, Mouse Brain (Fresh Frozen)",
+    "description": "10x Genomics Visium HD 3' dataset viewer for healthy fresh-frozen mouse brain tissue.",
+    "slug": "visium_hd_three_prime_mouse_brain_fresh_frozen",
+    "type": "single",
+    "r2_path": "viewers/visium_hd_three_prime_mouse_brain_fresh_frozen.html",
+    "tags": [
+      "Visium HD",
+      "3'",
+      "mouse",
+      "brain",
+      "fresh frozen",
+      "healthy",
+      "RNA",
+      "single-file"
+    ],
+    "citation": "10x Genomics. Visium HD 3' Gene Expression Library, Mouse Brain (Fresh Frozen). https://www.10xgenomics.com/datasets/visium-hd-three-prime-mouse-brain-fresh-frozen",
+    "thumbnail": "thumbs/visium_hd_three_prime_mouse_brain_fresh_frozen.jpg"
+  },
+  {
     "title": "Xenium Acute Neonatal Lung Injury",
     "description": "Xenium dataset from acute neonatal lung injury.",
     "slug": "xenium_acute_neonatal_lung_injury",
