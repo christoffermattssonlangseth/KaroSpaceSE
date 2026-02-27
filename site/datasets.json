@@ -253,6 +253,22 @@
     "thumbnail": "thumbs/visium_hd_mouse_small_intestine_ffpe.jpg"
   },
   {
+    "title": "Open-ST Mouse Brain",
+    "description": "Open-ST dataset viewer for mouse brain spatial transcriptomics data.",
+    "slug": "openst_mouse_brain",
+    "type": "single",
+    "r2_path": "viewers/openst_mouse_brain.html",
+    "tags": [
+      "Open-ST",
+      "mouse",
+      "brain",
+      "RNA",
+      "single-file"
+    ],
+    "citation": "Schott, M. et al. Open-ST: High-resolution spatial transcriptomics in 3D. Cell 187, 3953-3972.e26 (2024).",
+    "thumbnail": "thumbs/openst_mouse_brain.jpg"
+  },
+  {
     "title": "Xenium Acute Neonatal Lung Injury",
     "description": "Xenium dataset from acute neonatal lung injury.",
     "slug": "xenium_acute_neonatal_lung_injury",
