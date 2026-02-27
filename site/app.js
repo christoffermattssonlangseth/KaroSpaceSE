@@ -142,10 +142,20 @@ function createCard(dataset) {
   }
 
   titleEl.textContent = dataset.title || dataset.slug;
+  titleEl.title = titleEl.textContent;
   slugEl.textContent = dataset.slug ? `/${dataset.slug}` : "";
   descEl.textContent = dataset.description || "No description provided.";
+  descEl.title = descEl.textContent;
   if (dataset.citation) {
-    citationEl.textContent = dataset.citation;
+    citationEl.textContent = "";
+    const labelEl = document.createElement("span");
+    labelEl.className = "card__citation-label";
+    labelEl.textContent = "Citation";
+    const textEl = document.createElement("span");
+    textEl.className = "card__citation-text";
+    textEl.textContent = dataset.citation;
+    citationEl.append(labelEl, textEl);
+    citationEl.title = dataset.citation;
     citationEl.classList.remove("hidden");
   }
   const viewerUrl = buildViewerUrl(dataset);

@@ -355,6 +355,10 @@ body {
   margin: 0;
   font-size: 1.06rem;
   line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card__slug {
@@ -369,19 +373,36 @@ body {
   font-size: 0.9rem;
   color: var(--muted-color);
   line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card__citation {
   margin: 0;
-  font-size: 0.76rem;
-  line-height: 1.42;
-  color: var(--citation-color);
-  padding: 0.45rem 0.55rem;
-  border-radius: 6px;
+  padding: 0.55rem 0.65rem 0.6rem;
+  border-radius: 8px;
   border: 1px solid var(--citation-border);
   background: var(--citation-bg);
+  display: grid;
+  gap: 0.22rem;
+}
+
+.card__citation-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+}
+
+.card__citation-text {
+  font-size: 0.77rem;
+  line-height: 1.5;
+  color: var(--citation-color);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
