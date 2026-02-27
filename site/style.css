@@ -380,6 +380,10 @@ body {
   border-radius: 6px;
   border: 1px solid var(--citation-border);
   background: var(--citation-bg);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card__meta {
