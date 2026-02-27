@@ -196,6 +196,21 @@
     "thumbnail": "thumbs/xenium_human_lung_fibrosis.jpg"
   },
   {
+    "title": "Human Lung (LNG1-LNG6)",
+    "description": "KaroSpace viewer for a human lung dataset spanning regions LNG1, LNG2, LNG3, LNG5, and LNG6.",
+    "slug": "human_lung_regions",
+    "type": "single",
+    "r2_path": "viewers/human_lung_regions.html",
+    "tags": [
+      "human",
+      "lung",
+      "RNA",
+      "single-file"
+    ],
+    "citation": "Firsova, A. B. et al. Spatial single-cell atlas reveals regional variations in healthy and diseased human lung. Nat. Commun. 16, 9745 (2025).",
+    "thumbnail": "thumbs/human_lung_regions.jpg"
+  },
+  {
     "title": "Xenium Acute Neonatal Lung Injury",
     "description": "Xenium dataset from acute neonatal lung injury.",
     "slug": "xenium_acute_neonatal_lung_injury",
