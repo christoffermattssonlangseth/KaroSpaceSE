@@ -216,7 +216,7 @@
   {
     "title": "Visium HD 3' Mouse Brain (Fresh Frozen)",
     "description": "10x Genomics Visium HD 3' viewer for healthy fresh-frozen mouse brain.",
-    "slug": "visium_hd_three_prime_mouse_brain_fresh_frozen",
+    "slug": "visumHD_mousebrain",
     "type": "single",
     "r2_path": "viewers/visium_hd_three_prime_mouse_brain_fresh_frozen.html",
     "tags": [
