@@ -233,6 +233,26 @@
     "thumbnail": "thumbs/visium_hd_three_prime_mouse_brain_fresh_frozen.jpg"
   },
   {
+    "title": "Visium HD Spatial Gene Expression Library, Mouse Small Intestine (FFPE)",
+    "description": "10x Genomics Visium HD Spatial Gene Expression dataset viewer for healthy FFPE mouse small intestine tissue using Visium CytAssist.",
+    "slug": "visium_hd_mouse_small_intestine_ffpe",
+    "type": "directory",
+    "r2_path": "viewers/visium_hd_mouse_small_intestine_ffpe/index.html",
+    "tags": [
+      "Visium HD",
+      "CytAssist",
+      "mouse",
+      "small intestine",
+      "FFPE",
+      "healthy",
+      "RNA",
+      "externalized",
+      "large"
+    ],
+    "citation": "10x Genomics. Visium HD Spatial Gene Expression Library, Mouse Small Intestine (FFPE). https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-mouse-intestine",
+    "thumbnail": "thumbs/visium_hd_mouse_small_intestine_ffpe.jpg"
+  },
+  {
     "title": "Xenium Acute Neonatal Lung Injury",
     "description": "Xenium dataset from acute neonatal lung injury.",
     "slug": "xenium_acute_neonatal_lung_injury",
