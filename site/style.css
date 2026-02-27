@@ -401,10 +401,8 @@ body {
   font-size: 0.77rem;
   line-height: 1.5;
   color: var(--citation-color);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
+  overflow-wrap: anywhere;
 }
 
 .card__meta {
