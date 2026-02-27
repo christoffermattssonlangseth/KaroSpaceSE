@@ -196,14 +196,17 @@
     "thumbnail": "thumbs/xenium_human_lung_fibrosis.jpg"
   },
   {
-    "title": "Human Lung (LNG1-LNG6)",
-    "description": "KaroSpace viewer for a human lung dataset spanning regions LNG1, LNG2, LNG3, LNG5, and LNG6.",
+    "title": "HybISS Healthy and Diseased Human Lung",
+    "description": "HybISS dataset viewer for healthy and diseased human lung regions spanning LNG1, LNG2, LNG3, LNG5, and LNG6.",
     "slug": "human_lung_regions",
     "type": "single",
     "r2_path": "viewers/human_lung_regions.html",
     "tags": [
+      "HybISS",
       "human",
       "lung",
+      "healthy",
+      "diseased",
       "RNA",
       "single-file"
     ],
