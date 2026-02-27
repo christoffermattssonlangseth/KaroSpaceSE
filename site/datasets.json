@@ -214,8 +214,8 @@
     "thumbnail": "thumbs/human_lung_regions_light.jpg"
   },
   {
-    "title": "Visium HD 3' Gene Expression Library, Mouse Brain (Fresh Frozen)",
-    "description": "10x Genomics Visium HD 3' dataset viewer for healthy fresh-frozen mouse brain tissue.",
+    "title": "Visium HD 3' Mouse Brain (Fresh Frozen)",
+    "description": "10x Genomics Visium HD 3' viewer for healthy fresh-frozen mouse brain.",
     "slug": "visium_hd_three_prime_mouse_brain_fresh_frozen",
     "type": "single",
     "r2_path": "viewers/visium_hd_three_prime_mouse_brain_fresh_frozen.html",
@@ -229,8 +229,8 @@
       "RNA",
       "single-file"
     ],
-    "citation": "10x Genomics. Visium HD 3' Gene Expression Library, Mouse Brain (Fresh Frozen). https://www.10xgenomics.com/datasets/visium-hd-three-prime-mouse-brain-fresh-frozen",
-    "thumbnail": "thumbs/visium_hd_three_prime_mouse_brain_fresh_frozen_v2.jpg"
+    "citation": "10x Genomics dataset page: Visium HD 3' Mouse Brain (Fresh Frozen).",
+    "thumbnail": "thumbs/visium_hd_three_prime_mouse_brain_fresh_frozen_v3.jpg"
   },
   {
     "title": "Visium HD Spatial Gene Expression Library, Mouse Small Intestine (FFPE)",
