@@ -273,7 +273,7 @@
     "description": "Open-ST dataset viewer for metastatic lymph node tissue across 19 annotated sections.",
     "slug": "openst_metastatic_lymph_node",
     "type": "directory",
-    "r2_path": "viewers/openst_metastatic_lymph_node_v2/index.html",
+    "r2_path": "viewers/openst_metastatic_lymph_node_v3/index.html",
     "tags": [
       "Open-ST",
       "metastatic lymph node",
@@ -284,7 +284,7 @@
       "large"
     ],
     "citation": "Schott, M. et al. Open-ST: High-resolution spatial transcriptomics in 3D. Cell 187, 3953-3972.e26 (2024).",
-    "thumbnail": "thumbs/openst_metastatic_lymph_node_v3.jpg"
+    "thumbnail": "thumbs/openst_metastatic_lymph_node_v4.jpg"
   },
   {
     "title": "Xenium Acute Neonatal Lung Injury",
