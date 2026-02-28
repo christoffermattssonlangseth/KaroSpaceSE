@@ -21,6 +21,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from textwrap import indent
 from typing import Any
 
 
@@ -828,9 +829,19 @@ def replacement_for_candidate(candidate: BlobCandidate, blob_key: str) -> str:
             f"<script{attrs}></script>\n"
             "<script>\n"
             "(function () {\n"
-            f"  var __kData = window.__KAROSPACE_DATA_LOADER__.getSync({json.dumps(blob_key)});\n"
-            "  window.__KAROSPACE_DATA__ = window.__KAROSPACE_DATA__ || {};\n"
-            f"  window.__KAROSPACE_DATA__[{json.dumps(candidate.script_id)}] = __kData;\n"
+            "  function __kInstall(__kData) {\n"
+            "    window.__KAROSPACE_DATA__ = window.__KAROSPACE_DATA__ || {};\n"
+            f"    window.__KAROSPACE_DATA__[{json.dumps(candidate.script_id)}] = __kData;\n"
+            "  }\n"
+            "  var __kLoader = window.__KAROSPACE_DATA_LOADER__;\n"
+            "  if (!__kLoader) return;\n"
+            "  if (typeof __kLoader.getAsync === 'function') {\n"
+            f"    __kLoader.getAsync({json.dumps(blob_key)}).then(__kInstall).catch(function (error) {{\n"
+            "      console.error(error);\n"
+            "    });\n"
+            "    return;\n"
+            "  }\n"
+            f"  __kInstall(__kLoader.getSync({json.dumps(blob_key)}));\n"
             "})();\n"
             "</script>"
         )
@@ -884,6 +895,59 @@ def rewrite_script_json_consumers(
         )
         updated = pattern.sub(replacement, updated)
     return updated
+
+
+def rewrite_app_bootstrap(
+    html: str,
+    preload_blob_keys: list[str],
+) -> str:
+    unique_keys: list[str] = []
+    seen_keys: set[str] = set()
+    for key in preload_blob_keys:
+        if key not in seen_keys:
+            seen_keys.add(key)
+            unique_keys.append(key)
+
+    if not unique_keys:
+        return html
+
+    for script_match in SCRIPT_TAG_RE.finditer(html):
+        attrs = script_match.group("attrs") or ""
+        body = script_match.group("body") or ""
+        if "src=" in attrs.lower():
+            continue
+        if "const DATA =" not in body:
+            continue
+        if "__KAROSPACE_DATA_LOADER__.getSync(" not in body:
+            continue
+
+        preload_keys_json = json.dumps(unique_keys)
+        wrapped = (
+            "<script>\n"
+            "(function () {\n"
+            "  function __karoBootstrap() {\n"
+            f"{indent(body.strip(), '    ')}\n"
+            "  }\n"
+            "  var __kLoader = window.__KAROSPACE_DATA_LOADER__;\n"
+            "  if (!__kLoader || typeof __kLoader.getAsync !== 'function') {\n"
+            "    __karoBootstrap();\n"
+            "    return;\n"
+            "  }\n"
+            f"  var __kPreloadKeys = {preload_keys_json};\n"
+            "  Promise.all(__kPreloadKeys.map(function (key) {\n"
+            "    return __kLoader.getAsync(key);\n"
+            "  })).then(function () {\n"
+            "    __karoBootstrap();\n"
+            "  }).catch(function (error) {\n"
+            "    console.error(error);\n"
+            "    __karoBootstrap();\n"
+            "  });\n"
+            "})();\n"
+            "</script>"
+        )
+        return html[: script_match.start()] + wrapped + html[script_match.end() :]
+
+    return html
 
 
 def make_backup_copy(input_path: Path, outdir: Path, slug: str) -> Path:
@@ -941,6 +1005,7 @@ def externalize_to_directory(
 
     replacements: list[Replacement] = []
     script_json_mappings: list[tuple[str, str]] = []
+    preload_blob_keys: list[str] = []
     chunk_counter = 0
 
     for idx, candidate in enumerate(candidates):
@@ -980,9 +1045,12 @@ def externalize_to_directory(
         )
         if candidate.detector == "script_json" and candidate.script_id:
             script_json_mappings.append((candidate.script_id, blob_key))
+            preload_blob_keys.append(blob_key)
 
     index_html = apply_replacements(html, replacements)
     index_html = rewrite_script_json_consumers(index_html, script_json_mappings)
+    preload_blob_keys.extend(re.findall(r'getSync\("([^"]+)"\)', index_html))
+    index_html = rewrite_app_bootstrap(index_html, preload_blob_keys)
     index_html = ensure_loader_runtime(index_html)
     index_html = ensure_standalone_download_button(index_html, slug)
 
