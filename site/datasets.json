@@ -273,7 +273,7 @@
     "description": "Open-ST dataset viewer for metastatic lymph node tissue across 19 annotated sections.",
     "slug": "openst_metastatic_lymph_node",
     "type": "directory",
-    "r2_path": "viewers/openst_metastatic_lymph_node_v3/index.html",
+    "r2_path": "viewers/openst_metastatic_lymph_node_v4/index.html",
     "tags": [
       "Open-ST",
       "metastatic lymph node",

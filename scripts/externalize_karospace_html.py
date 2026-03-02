@@ -897,6 +897,36 @@ def rewrite_script_json_consumers(
     return updated
 
 
+def rewrite_dom_ready_init(body: str) -> str:
+    pattern = re.compile(
+        r"""
+        (?P<indent>[ \t]*)
+        //\ Initialize\ \(don't\ wait\ for\ external\ resources\)\n
+        (?P=indent)document\.addEventListener\('DOMContentLoaded',\s*\(\)\s*=>\s*\{\n
+        (?P<init_body>.*?)
+        (?P=indent)\}\);\n
+        """,
+        re.VERBOSE | re.DOTALL,
+    )
+
+    def repl(match: re.Match[str]) -> str:
+        indent_str = match.group("indent")
+        init_body = match.group("init_body")
+        return (
+            f"{indent_str}// Initialize (don't wait for external resources)\n"
+            f"{indent_str}const __karoInit = () => {{\n"
+            f"{init_body}"
+            f"{indent_str}}};\n"
+            f"{indent_str}if (document.readyState === 'loading') {{\n"
+            f"{indent_str}    document.addEventListener('DOMContentLoaded', __karoInit, {{ once: true }});\n"
+            f"{indent_str}}} else {{\n"
+            f"{indent_str}    __karoInit();\n"
+            f"{indent_str}}}\n"
+        )
+
+    return pattern.sub(repl, body, count=1)
+
+
 def rewrite_app_bootstrap(
     html: str,
     preload_blob_keys: list[str],
@@ -920,6 +950,7 @@ def rewrite_app_bootstrap(
             continue
         if "__KAROSPACE_DATA_LOADER__.getSync(" not in body:
             continue
+        body = rewrite_dom_ready_init(body)
 
         preload_keys_json = json.dumps(unique_keys)
         wrapped = (
