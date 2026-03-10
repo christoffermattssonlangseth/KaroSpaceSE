@@ -230,7 +230,8 @@ body {
   padding: 1.2rem 0 2.6rem;
 }
 
-.tutorial {
+.tutorial,
+.resources {
   margin-bottom: 1rem;
   padding: 1rem 1.1rem;
   border: 1px solid var(--tutorial-border);
@@ -246,12 +247,14 @@ body {
   gap: 1rem;
 }
 
-.tutorial__copy {
+.tutorial__copy,
+.resources__copy {
   display: grid;
   gap: 0.35rem;
 }
 
-.tutorial__eyebrow {
+.tutorial__eyebrow,
+.resources__eyebrow {
   margin: 0;
   font-size: 0.68rem;
   text-transform: uppercase;
@@ -260,13 +263,15 @@ body {
   color: var(--accent);
 }
 
-.tutorial__title {
+.tutorial__title,
+.resources__title {
   margin: 0;
   font-size: 1.08rem;
   line-height: 1.3;
 }
 
-.tutorial__description {
+.tutorial__description,
+.resources__description {
   margin: 0;
   max-width: 62ch;
   color: var(--muted-color);
@@ -274,7 +279,8 @@ body {
   line-height: 1.5;
 }
 
-.tutorial__actions {
+.tutorial__actions,
+.resources__actions {
   flex: 0 0 auto;
   display: grid;
   gap: 0.65rem;
@@ -573,13 +579,15 @@ body {
     padding-top: 0.9rem;
   }
 
-  .tutorial {
+  .tutorial,
+  .resources {
     padding: 0.95rem 1rem;
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .tutorial__actions {
+  .tutorial__actions,
+  .resources__actions {
     width: 100%;
   }
 
