@@ -274,8 +274,13 @@ body {
   line-height: 1.5;
 }
 
-.tutorial__link {
+.tutorial__actions {
   flex: 0 0 auto;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.tutorial__link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -572,6 +577,10 @@ body {
     padding: 0.95rem 1rem;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .tutorial__actions {
+    width: 100%;
   }
 
   .tutorial__link {
