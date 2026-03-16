@@ -7,9 +7,9 @@ Required environment variables:
 - R2_SECRET_ACCESS_KEY
 - R2_ACCOUNT_ID
 - R2_BUCKET
-- R2_PUBLIC_HOST
 
 Optional:
+- R2_PUBLIC_HOST (falls back to site config viewer_host)
 - R2_PREFIX (default: "viewers")
 """
 
@@ -21,6 +21,9 @@ import os
 import sys
 from pathlib import Path
 from typing import Iterable
+
+from portal_config import DEFAULT_SITE_CONFIG_PATH, resolve_viewer_host
+from portal_validation import format_report, validate_viewers_tree
 
 
 EXTENSION_CONTENT_TYPES = {
@@ -49,6 +52,11 @@ def parse_args() -> argparse.Namespace:
         help="R2 key prefix. Defaults to env R2_PREFIX or 'viewers'.",
     )
     parser.add_argument(
+        "--config",
+        default=DEFAULT_SITE_CONFIG_PATH,
+        help="Path to static site config JSON.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show planned uploads without sending data.",
@@ -61,13 +69,6 @@ def require_env(name: str) -> str:
     if value:
         return value
     raise RuntimeError(f"Missing required environment variable: {name}")
-
-
-def normalize_public_base(public_host: str) -> str:
-    cleaned = public_host.strip().rstrip("/")
-    if cleaned.startswith("http://") or cleaned.startswith("https://"):
-        return cleaned
-    return f"https://{cleaned}"
 
 
 def iter_upload_files(viewers_dir: Path) -> Iterable[Path]:
@@ -137,7 +138,11 @@ def run() -> int:
     secret_key = require_env("R2_SECRET_ACCESS_KEY")
     account_id = require_env("R2_ACCOUNT_ID")
     bucket = require_env("R2_BUCKET")
-    public_host = require_env("R2_PUBLIC_HOST")
+    public_host = resolve_viewer_host(
+        None,
+        os.environ.get("R2_PUBLIC_HOST"),
+        config_path=args.config,
+    )
     prefix = args.prefix or os.environ.get("R2_PREFIX", "viewers")
 
     viewers_dir = Path(args.viewers_dir).expanduser().resolve()
@@ -146,11 +151,21 @@ def run() -> int:
     if not viewers_dir.is_dir():
         raise ValueError(f"--viewers-dir is not a directory: {viewers_dir}")
 
+    preflight = validate_viewers_tree(viewers_dir)
+    if preflight.warnings:
+        print(format_report(preflight))
+        print("")
+    if preflight.errors:
+        raise RuntimeError(
+            "Viewer preflight failed.\n"
+            f"{format_report(preflight)}"
+        )
+
     files = sorted(iter_upload_files(viewers_dir))
     if not files:
         raise RuntimeError(f"No files found to upload in {viewers_dir}")
 
-    public_base = normalize_public_base(public_host)
+    public_base = public_host
     uploaded_urls: list[str] = []
 
     if args.dry_run:

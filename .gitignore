@@ -1,5 +1,5 @@
 # ------------------------------------------------------------
-# Local-only large viewer assets (never commit)
+# Local staging/deployment viewer assets (normally never commit)
 # ------------------------------------------------------------
 exports/
 viewers/

@@ -1,5 +1,6 @@
 const DATASETS_URL = "./datasets.json";
-const VIEWER_HOST = "https://viewers.karospace.se";
+const CONFIG_URL = "./config.json";
+const DEFAULT_VIEWER_HOST = "https://viewers.karospace.se";
 const THEME_STORAGE_KEY = "karospace-theme";
 
 const cardsEl = document.getElementById("cards");
@@ -10,6 +11,7 @@ const templateEl = document.getElementById("cardTemplate");
 const themeToggleEl = document.getElementById("themeToggle");
 
 let allDatasets = [];
+let viewerHost = DEFAULT_VIEWER_HOST;
 const INTERACTIVE_SELECTOR = "a, button, input, select, textarea, label";
 
 function readStoredTheme() {
@@ -77,9 +79,20 @@ function normalizePath(path) {
   return String(path || "").replace(/^\/+/, "");
 }
 
+function normalizeViewerHost(value) {
+  const trimmed = String(value || "").trim().replace(/\/+$/, "");
+  if (!trimmed) {
+    return DEFAULT_VIEWER_HOST;
+  }
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
 function buildViewerUrl(dataset) {
   const path = normalizePath(dataset.r2_path);
-  return `${VIEWER_HOST}/${path}`;
+  return `${viewerHost}/${path}`;
 }
 
 function buildSearchText(dataset) {
@@ -236,9 +249,31 @@ async function loadDatasets() {
   return data;
 }
 
+async function loadSiteConfig() {
+  try {
+    const response = await fetch(CONFIG_URL, { cache: "no-store" });
+    if (response.status === 404) {
+      return { viewer_host: DEFAULT_VIEWER_HOST };
+    }
+    if (!response.ok) {
+      throw new Error(`Failed to load ${CONFIG_URL}: ${response.status}`);
+    }
+    const data = await response.json();
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      throw new Error("config.json must contain an object.");
+    }
+    return data;
+  } catch (error) {
+    console.warn(`Falling back to default viewer host: ${error.message}`);
+    return { viewer_host: DEFAULT_VIEWER_HOST };
+  }
+}
+
 async function init() {
   initTheme();
   try {
+    const config = await loadSiteConfig();
+    viewerHost = normalizeViewerHost(config.viewer_host);
     allDatasets = await loadDatasets();
     renderCards(allDatasets);
     searchEl.addEventListener("input", filterDatasets);

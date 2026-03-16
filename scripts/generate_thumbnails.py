@@ -16,6 +16,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
+from portal_config import DEFAULT_SITE_CONFIG_PATH, resolve_viewer_host
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -32,9 +34,14 @@ def parse_args() -> argparse.Namespace:
         help="Directory where thumbnails are saved.",
     )
     parser.add_argument(
+        "--config",
+        default=DEFAULT_SITE_CONFIG_PATH,
+        help="Path to static site config JSON.",
+    )
+    parser.add_argument(
         "--viewer-host",
-        default="https://viewers.karospace.se",
-        help="Viewer host used with each dataset r2_path.",
+        default=None,
+        help="Viewer host used with each dataset r2_path. Defaults to site config.",
     )
     parser.add_argument(
         "--host-ip",
@@ -111,15 +118,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def normalize_host(value: str) -> str:
-    host = value.strip().rstrip("/")
-    if not host:
-        raise ValueError("--viewer-host cannot be empty.")
-    if not host.startswith(("http://", "https://")):
-        host = f"https://{host}"
-    return host
-
-
 def sanitize_slug(slug: str) -> str:
     clean = re.sub(r"[^A-Za-z0-9._-]+", "_", slug).strip("._")
     return clean or "dataset"
@@ -151,7 +149,7 @@ def save_datasets(path: Path, datasets: list[dict]) -> None:
 
 def run() -> int:
     args = parse_args()
-    viewer_host = normalize_host(args.viewer_host)
+    viewer_host = resolve_viewer_host(args.viewer_host, None, config_path=args.config)
 
     if args.width <= 0 or args.height <= 0:
         raise ValueError("--width and --height must be > 0.")

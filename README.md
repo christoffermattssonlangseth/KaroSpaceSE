@@ -3,8 +3,11 @@
 Lightweight landing portal for KaroSpace viewers using a hybrid Cloudflare setup:
 - Cloudflare Pages serves the landing site from `/site`
 - Cloudflare R2 serves viewer files from a public custom domain
+- `site/config.json` stores the shared viewer host used by the site and helper scripts
 
-This repository intentionally excludes large viewer exports and processed viewer artifacts.
+This repository keeps the landing site tracked in git and treats `exports/` and `viewers/`
+as local staging/deployment artifacts. Large viewer exports and processed artifacts remain
+gitignored by default.
 
 ## Suggested GitHub Metadata
 
@@ -23,9 +26,11 @@ This repository intentionally excludes large viewer exports and processed viewer
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js
+│   ├── config.json
 │   └── datasets.json
 ├── scripts/
 │   ├── externalize_karospace_html.py
+│   ├── validate_portal.py
 │   ├── upload_to_r2.py
 │   └── generate_thumbnails.py
 ├── site/thumbs/ # optional local thumbnails for dataset cards
@@ -62,6 +67,7 @@ https://viewers.yourdomain.com/viewers/<viewer-path>
 3. Build command: none.
 4. Output directory: `site`.
 5. Attach your custom domain (for example `yourdomain.com`).
+6. Set `site/config.json` with the public viewer host served by R2.
 
 ### Viewers (Cloudflare R2)
 
@@ -84,7 +90,13 @@ python scripts/externalize_karospace_html.py \
 python scripts/upload_to_r2.py --viewers-dir ./viewers
 ```
 
-4. Add/update entries in `site/datasets.json` so the landing page can link to new viewers.
+4. Validate local metadata and viewer artifacts:
+
+```bash
+python scripts/validate_portal.py
+```
+
+5. Add/update entries in `site/datasets.json` so the landing page can link to new viewers.
 
 ### Optional: Auto-generate dataset thumbnails
 
@@ -101,7 +113,6 @@ Generate thumbnails and update `site/datasets.json` automatically:
 python scripts/generate_thumbnails.py \
   --datasets site/datasets.json \
   --output-dir site/thumbs \
-  --viewer-host https://viewers.karospace.se \
   --overwrite
 ```
 
@@ -116,7 +127,6 @@ temporary host override:
 
 ```bash
 python scripts/generate_thumbnails.py \
-  --viewer-host https://viewers.karospace.se \
   --host-ip 188.114.96.1 \
   --overwrite
 ```
@@ -126,6 +136,7 @@ python scripts/generate_thumbnails.py \
 - [ ] Export new dataset from KaroSpace to `exports/<slug>.html`
 - [ ] Run `externalize_karospace_html.py` in `auto` mode
 - [ ] Verify output is either `viewers/<slug>.html` or `viewers/<slug>/index.html`
+- [ ] Run `python scripts/validate_portal.py`
 - [ ] Upload `viewers/` to Cloudflare R2
 - [ ] Add dataset entry in `site/datasets.json`
 - [ ] Confirm link opens from landing page
@@ -133,4 +144,7 @@ python scripts/generate_thumbnails.py \
 ## Notes
 
 - No frontend frameworks are used (plain HTML/CSS/JS).
-- `exports/` and `viewers/` are intentionally excluded from git.
+- `exports/` and `viewers/` are intentionally excluded from git, but are expected to exist
+  locally as staging artifacts during publishing.
+- `upload_to_r2.py` runs a local preflight on externalized viewers before uploading.
+- `validate_portal.py --check-remote` can verify published viewer URLs after deployment.
