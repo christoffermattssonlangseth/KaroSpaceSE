@@ -304,5 +304,22 @@
     ],
     "citation": "Mallapragada, S. et al. A spatial transcriptomic atlas of acute neonatal lung injury across development and disease severity. Am. J. Physiol.-Lung Cell. Mol. Physiol. 329, L376-L388 (2025).",
     "thumbnail": "thumbs/xenium_acute_neonatal_lung_injury_v2.jpg"
+  },
+  {
+    "title": "Mouse Brain Xenium 5k",
+    "description": "Xenium mouse brain viewer with sidecar-loaded external gene expression shards.",
+    "slug": "mouseBrainXenium5k",
+    "type": "single",
+    "r2_path": "viewers/mouseBrainXenium5k.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "mouse",
+      "brain",
+      "5k",
+      "single-file",
+      "gene-sidecar"
+    ],
+    "thumbnail": "thumbs/mouseBrainXenium5k.jpg"
   }
 ]

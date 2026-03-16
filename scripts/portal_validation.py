@@ -18,6 +18,8 @@ from urllib.request import Request, urlopen
 VALID_DATASET_TYPES = {"single", "directory"}
 SLUG_RE = re.compile(r"[A-Za-z0-9._-]+")
 REMOTE_METHODS = ("HEAD", "GET")
+GENE_AUX_URL_RE = re.compile(r'"gene_aux_url"\s*:\s*"((?:[^"\\]|\\.)*)"')
+GENE_SIDECAR_FORMAT = "karospace-gene-sidecar-manifest-v2"
 
 
 @dataclass
@@ -76,6 +78,139 @@ def _resolve_relative(base_dir: Path, relative_path: str) -> Path:
     except ValueError as exc:
         raise RuntimeError(f"Path escapes base directory {base_dir}: {relative_path}") from exc
     return target
+
+
+def _extract_gene_aux_url(html_path: Path) -> str | None:
+    try:
+        text = html_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(f"Unable to read HTML viewer {html_path}: {exc}") from exc
+
+    match = GENE_AUX_URL_RE.search(text)
+    if not match:
+        return None
+    return json.loads(f'"{match.group(1)}"')
+
+
+def _validate_gene_sidecar(html_path: Path, context: str, report: ValidationReport) -> None:
+    try:
+        aux_relative = _extract_gene_aux_url(html_path)
+    except RuntimeError as exc:
+        report.add_error(f"{context}: {exc}")
+        return
+
+    if not aux_relative:
+        return
+
+    try:
+        aux_path = _resolve_relative(html_path.parent, aux_relative)
+    except RuntimeError as exc:
+        report.add_error(f"{context}: {exc}")
+        return
+
+    if not aux_path.exists():
+        report.add_error(f"{context}: missing gene sidecar manifest {aux_path}")
+        return
+    if not aux_path.is_file():
+        report.add_error(f"{context}: gene sidecar manifest is not a file {aux_path}")
+        return
+
+    try:
+        manifest = _load_json(aux_path)
+    except RuntimeError as exc:
+        report.add_error(f"{context}: {exc}")
+        return
+
+    if not isinstance(manifest, dict):
+        report.add_error(f"{context}: gene sidecar manifest must contain a JSON object")
+        return
+    if manifest.get("format") != GENE_SIDECAR_FORMAT:
+        report.add_error(
+            f"{context}: unsupported gene sidecar format "
+            f"'{manifest.get('format')}' in {aux_path}"
+        )
+
+    shards = manifest.get("shards")
+    if not isinstance(shards, dict) or not shards:
+        report.add_error(f"{context}: gene sidecar manifest must contain a non-empty 'shards' object")
+        return
+
+    seen_shards: set[str] = set()
+    for shard_relative, genes in shards.items():
+        if not isinstance(shard_relative, str) or not shard_relative.strip():
+            report.add_error(f"{context}: gene sidecar shard path must be a non-empty string")
+            continue
+        if shard_relative in seen_shards:
+            report.add_error(f"{context}: duplicate gene sidecar shard '{shard_relative}'")
+            continue
+        seen_shards.add(shard_relative)
+
+        if not isinstance(genes, list) or not all(isinstance(gene, str) and gene.strip() for gene in genes):
+            report.add_error(f"{context}: shard '{shard_relative}' must map to a list of non-empty gene names")
+
+        try:
+            shard_path = _resolve_relative(html_path.parent, shard_relative)
+        except RuntimeError as exc:
+            report.add_error(f"{context}: {exc}")
+            continue
+
+        if not shard_path.exists():
+            report.add_error(f"{context}: missing gene shard {shard_path}")
+            continue
+        if not shard_path.is_file():
+            report.add_error(f"{context}: gene shard is not a file {shard_path}")
+            continue
+
+        try:
+            _load_json(shard_path)
+        except RuntimeError as exc:
+            report.add_error(f"{context}: {exc}")
+
+
+def _collect_sidecar_entry_names(root: Path) -> set[str]:
+    recognized: set[str] = set()
+    for html_path in sorted(root.glob("*.html")):
+        try:
+            aux_relative = _extract_gene_aux_url(html_path)
+        except RuntimeError:
+            continue
+        if not aux_relative:
+            continue
+
+        aux_name = Path(aux_relative).name
+        if aux_name:
+            recognized.add(aux_name)
+
+        sidecar_dir_name = Path(aux_relative).stem
+        if sidecar_dir_name:
+            recognized.add(sidecar_dir_name)
+
+        try:
+            aux_path = _resolve_relative(html_path.parent, aux_relative)
+        except RuntimeError:
+            continue
+        if not aux_path.exists() or not aux_path.is_file():
+            continue
+
+        try:
+            manifest = _load_json(aux_path)
+        except RuntimeError:
+            continue
+        shards = manifest.get("shards") if isinstance(manifest, dict) else None
+        if not isinstance(shards, dict):
+            continue
+        for shard_relative in shards:
+            if not isinstance(shard_relative, str) or not shard_relative.strip():
+                continue
+            try:
+                shard_path = _resolve_relative(html_path.parent, shard_relative)
+                relative_parts = shard_path.relative_to(root).parts
+            except (RuntimeError, ValueError):
+                continue
+            if relative_parts:
+                recognized.add(relative_parts[0])
+
+    return recognized
 
 
 def _validate_manifest(viewer_dir: Path, manifest_path: Path, context: str, report: ValidationReport) -> None:
@@ -171,6 +306,8 @@ def validate_viewer_entry(r2_path: str, dataset_type: str, viewers_root: Path, c
             report.add_error(f"{context}: single viewer r2_path must point to an .html file")
         if not target_path.is_file():
             report.add_error(f"{context}: single viewer target is not a file {target_path}")
+            return report
+        _validate_gene_sidecar(target_path, context, report)
         return report
 
     if dataset_type == "directory":
@@ -199,9 +336,14 @@ def validate_viewers_tree(viewers_dir: Path) -> ValidationReport:
         report.add_error(f"Viewers path is not a directory: {root}")
         return report
 
+    sidecar_entries = _collect_sidecar_entry_names(root)
     entries = [
         path for path in sorted(root.iterdir())
-        if not path.name.startswith(".") and path.name != "_backups"
+        if (
+            not path.name.startswith(".")
+            and path.name != "_backups"
+            and path.name not in sidecar_entries
+        )
     ]
     if not entries:
         report.add_error(f"No viewer artifacts found in {root}")
@@ -212,6 +354,8 @@ def validate_viewers_tree(viewers_dir: Path) -> ValidationReport:
         if entry.is_file():
             if entry.suffix.lower() != ".html":
                 report.add_warning(f"{context}: unexpected top-level file {entry.name}")
+                continue
+            _validate_gene_sidecar(entry, context, report)
             continue
         if entry.is_dir():
             index_path = entry / "index.html"

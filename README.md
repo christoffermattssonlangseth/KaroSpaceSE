@@ -98,6 +98,18 @@ python scripts/validate_portal.py
 
 5. Add/update entries in `site/datasets.json` so the landing page can link to new viewers.
 
+For sidecar gene viewers exported from KaroSpace with `gene_storage="sidecar"`, keep the
+generated files together under the same basename:
+
+```text
+viewers/<slug>.html
+viewers/<slug>.genes.json
+viewers/<slug>.genes/*.json
+```
+
+The HTML fetches the sidecar manifest and shard files by relative path, so these files must
+be deployed together on the same viewer host without renaming.
+
 ### Optional: Auto-generate dataset thumbnails
 
 Install Playwright once:
@@ -136,6 +148,7 @@ python scripts/generate_thumbnails.py \
 - [ ] Export new dataset from KaroSpace to `exports/<slug>.html`
 - [ ] Run `externalize_karospace_html.py` in `auto` mode
 - [ ] Verify output is either `viewers/<slug>.html` or `viewers/<slug>/index.html`
+- [ ] If using sidecar gene storage, also stage `viewers/<slug>.genes.json` and `viewers/<slug>.genes/`
 - [ ] Run `python scripts/validate_portal.py`
 - [ ] Upload `viewers/` to Cloudflare R2
 - [ ] Add dataset entry in `site/datasets.json`
@@ -147,4 +160,5 @@ python scripts/generate_thumbnails.py \
 - `exports/` and `viewers/` are intentionally excluded from git, but are expected to exist
   locally as staging artifacts during publishing.
 - `upload_to_r2.py` runs a local preflight on externalized viewers before uploading.
+- `validate_portal.py` also validates sidecar gene manifests referenced by single-file viewers.
 - `validate_portal.py --check-remote` can verify published viewer URLs after deployment.
