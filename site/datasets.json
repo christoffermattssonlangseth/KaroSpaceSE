@@ -307,7 +307,7 @@
   },
   {
     "title": "Mouse Brain Xenium 5k",
-    "description": "Xenium mouse brain viewer with sidecar-loaded external gene expression shards.",
+    "description": "Development Xenium mouse brain viewer showcasing new and experimental KaroSpace implementations with sidecar-loaded external gene expression shards.",
     "slug": "mouseBrainXenium5k",
     "type": "single",
     "r2_path": "viewers/mouseBrainXenium5k.html",
