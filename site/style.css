@@ -276,8 +276,8 @@ body {
 
 .tutorial__groups {
   flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.9rem;
 }
 
