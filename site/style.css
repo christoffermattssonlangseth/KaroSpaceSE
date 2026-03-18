@@ -276,8 +276,8 @@ body {
 
 .tutorial__groups {
   flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
   gap: 0.9rem;
 }
 
@@ -297,7 +297,8 @@ body {
 
 .tutorial__actions {
   flex: 0 0 auto;
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
