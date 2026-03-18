@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Upload local viewers output to Cloudflare R2 using the S3-compatible API.
+Upload local viewer artifacts to Cloudflare R2 using the S3-compatible API.
 
 Required environment variables:
 - R2_ACCESS_KEY_ID
@@ -40,11 +40,23 @@ EXTENSION_CONTENT_TYPES = {
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Sync ./viewers content to Cloudflare R2.")
+    parser = argparse.ArgumentParser(
+        description="Upload local viewer artifacts to Cloudflare R2."
+    )
     parser.add_argument(
         "--viewers-dir",
         default="./viewers",
-        help="Local viewers directory to upload.",
+        help="Local viewers directory to upload or use as the default base for --file.",
+    )
+    parser.add_argument(
+        "--file",
+        default=None,
+        help="Upload a single file instead of syncing the entire viewers directory.",
+    )
+    parser.add_argument(
+        "--key",
+        default=None,
+        help="Explicit R2 object key to use with --file.",
     )
     parser.add_argument(
         "--prefix",
@@ -60,6 +72,11 @@ def parse_args() -> argparse.Namespace:
         "--dry-run",
         action="store_true",
         help="Show planned uploads without sending data.",
+    )
+    parser.add_argument(
+        "--skip-preflight",
+        action="store_true",
+        help="Skip viewers tree validation before uploading.",
     )
     return parser.parse_args()
 
@@ -111,6 +128,59 @@ def build_key(prefix: str, viewers_dir: Path, file_path: Path) -> str:
     return f"{cleaned_prefix}/{relative}"
 
 
+def normalize_key(key: str) -> str:
+    cleaned = str(key or "").strip().lstrip("/")
+    if not cleaned:
+        raise ValueError("R2 object key must be a non-empty path")
+    return cleaned
+
+
+def should_run_preflight(
+    *,
+    single_file: Path | None,
+    viewers_dir: Path,
+    skip_preflight: bool,
+) -> bool:
+    if skip_preflight:
+        return False
+    if single_file is None:
+        return True
+    try:
+        single_file.relative_to(viewers_dir)
+    except ValueError:
+        return False
+    return True
+
+
+def resolve_upload_targets(
+    *,
+    viewers_dir: Path,
+    prefix: str,
+    single_file_arg: str | None,
+    key_override: str | None,
+) -> list[tuple[Path, str]]:
+    if single_file_arg:
+        file_path = Path(single_file_arg).expanduser().resolve()
+        if not file_path.exists():
+            raise FileNotFoundError(f"File does not exist: {file_path}")
+        if not file_path.is_file():
+            raise ValueError(f"--file is not a file: {file_path}")
+
+        if key_override:
+            return [(file_path, normalize_key(key_override))]
+
+        try:
+            file_path.relative_to(viewers_dir)
+        except ValueError as exc:
+            raise ValueError(
+                "--file must be inside --viewers-dir unless --key is provided"
+            ) from exc
+        return [(file_path, build_key(prefix, viewers_dir, file_path))]
+
+    files = sorted(iter_upload_files(viewers_dir))
+    return [(file_path, build_key(prefix, viewers_dir, file_path)) for file_path in files]
+
+
 def build_s3_client(access_key: str, secret_key: str, account_id: str):
     try:
         import boto3
@@ -133,6 +203,8 @@ def build_s3_client(access_key: str, secret_key: str, account_id: str):
 
 def run() -> int:
     args = parse_args()
+    if args.key and not args.file:
+        raise ValueError("--key can only be used with --file")
 
     access_key = require_env("R2_ACCESS_KEY_ID")
     secret_key = require_env("R2_SECRET_ACCESS_KEY")
@@ -145,24 +217,49 @@ def run() -> int:
     )
     prefix = args.prefix or os.environ.get("R2_PREFIX", "viewers")
 
+    single_file = (
+        Path(args.file).expanduser().resolve()
+        if args.file
+        else None
+    )
     viewers_dir = Path(args.viewers_dir).expanduser().resolve()
-    if not viewers_dir.exists():
-        raise FileNotFoundError(f"Viewers directory does not exist: {viewers_dir}")
-    if not viewers_dir.is_dir():
-        raise ValueError(f"--viewers-dir is not a directory: {viewers_dir}")
-
-    preflight = validate_viewers_tree(viewers_dir)
-    if preflight.warnings:
-        print(format_report(preflight))
-        print("")
-    if preflight.errors:
-        raise RuntimeError(
-            "Viewer preflight failed.\n"
-            f"{format_report(preflight)}"
+    needs_viewers_dir = (
+        single_file is None
+        or not args.key
+        or should_run_preflight(
+            single_file=single_file,
+            viewers_dir=viewers_dir,
+            skip_preflight=args.skip_preflight,
         )
+    )
+    if needs_viewers_dir:
+        if not viewers_dir.exists():
+            raise FileNotFoundError(f"Viewers directory does not exist: {viewers_dir}")
+        if not viewers_dir.is_dir():
+            raise ValueError(f"--viewers-dir is not a directory: {viewers_dir}")
 
-    files = sorted(iter_upload_files(viewers_dir))
-    if not files:
+    if should_run_preflight(
+        single_file=single_file,
+        viewers_dir=viewers_dir,
+        skip_preflight=args.skip_preflight,
+    ):
+        preflight = validate_viewers_tree(viewers_dir)
+        if preflight.warnings:
+            print(format_report(preflight))
+            print("")
+        if preflight.errors:
+            raise RuntimeError(
+                "Viewer preflight failed.\n"
+                f"{format_report(preflight)}"
+            )
+
+    upload_targets = resolve_upload_targets(
+        viewers_dir=viewers_dir,
+        prefix=prefix,
+        single_file_arg=args.file,
+        key_override=args.key,
+    )
+    if not upload_targets:
         raise RuntimeError(f"No files found to upload in {viewers_dir}")
 
     public_base = public_host
@@ -170,8 +267,7 @@ def run() -> int:
 
     if args.dry_run:
         print("Dry run enabled. No files will be uploaded.")
-        for file_path in files:
-            key = build_key(prefix, viewers_dir, file_path)
+        for file_path, key in upload_targets:
             ctype = content_type_for(file_path)
             ccache = cache_control_for(file_path)
             print(
@@ -181,8 +277,7 @@ def run() -> int:
             uploaded_urls.append(f"{public_base}/{key}")
     else:
         s3_client = build_s3_client(access_key, secret_key, account_id)
-        for file_path in files:
-            key = build_key(prefix, viewers_dir, file_path)
+        for file_path, key in upload_targets:
             ctype = content_type_for(file_path)
             ccache = cache_control_for(file_path)
             s3_client.upload_file(

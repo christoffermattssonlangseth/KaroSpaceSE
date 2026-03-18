@@ -90,6 +90,22 @@ python scripts/externalize_karospace_html.py \
 python scripts/upload_to_r2.py --viewers-dir ./viewers
 ```
 
+To upload just one file instead of syncing the whole tree:
+
+```bash
+python scripts/upload_to_r2.py \
+  --file ./viewers/RRMap.html
+```
+
+If the file lives outside `./viewers`, provide the full R2 object key explicitly:
+
+```bash
+python scripts/upload_to_r2.py \
+  --file ./exports/RRMap.html \
+  --key viewers/RRMap.html \
+  --skip-preflight
+```
+
 4. Validate local metadata and viewer artifacts:
 
 ```bash
