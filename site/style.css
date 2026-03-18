@@ -278,11 +278,13 @@ body {
   flex: 0 0 auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
+  align-items: start;
   gap: 0.9rem;
 }
 
 .tutorial__group {
   display: grid;
+  min-width: 0;
   gap: 0.5rem;
 }
 
@@ -297,15 +299,14 @@ body {
 
 .tutorial__actions {
   flex: 0 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 0.5rem;
 }
 
 .tutorial__link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 42px;
   padding: 0.65rem 0.95rem;
   border-radius: 999px;
@@ -315,7 +316,8 @@ body {
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 700;
-  white-space: nowrap;
+  text-align: left;
+  white-space: normal;
   transition:
     background 160ms ease,
     border-color 160ms ease,
