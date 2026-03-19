@@ -308,9 +308,9 @@ body {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  column-gap: 0.7rem;
+  column-gap: 0.35rem;
   min-height: 42px;
-  padding: 0.65rem 0.95rem;
+  padding: 0.65rem 0.85rem;
   border-radius: 999px;
   border: 1px solid var(--tutorial-link-border);
   background: var(--tutorial-link-bg);
@@ -340,9 +340,10 @@ body {
 .tutorial__repo-links {
   min-width: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
+  white-space: nowrap;
 }
 
 .tutorial__repo-link {
@@ -350,7 +351,7 @@ body {
   text-decoration: none;
   font-size: 0.84rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .tutorial__repo-link:hover,
@@ -712,6 +713,11 @@ body {
 
   .tutorial__link {
     width: 100%;
+    white-space: normal;
+  }
+
+  .tutorial__repo-links {
+    flex-wrap: wrap;
     white-space: normal;
   }
 
