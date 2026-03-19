@@ -275,9 +275,10 @@ body {
 }
 
 .tutorial__groups {
-  flex: 0 0 auto;
+  flex: 0 1 35rem;
+  width: min(100%, 35rem);
   display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   gap: 0.9rem;
 }
