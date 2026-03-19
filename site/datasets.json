@@ -320,6 +320,25 @@
       "single-file",
       "gene-sidecar"
     ],
+    "status": "development",
     "thumbnail": "thumbs/mouseBrainXenium5k.jpg"
+  },
+  {
+    "title": "Xenium Mouse Pup (Sidecar)",
+    "description": "Development Xenium mouse pup viewer using single-file delivery with sidecar-loaded external gene expression shards.",
+    "slug": "xenium_mouse_pup_sidecar",
+    "type": "single",
+    "r2_path": "viewers/xenium-mouse-pup-sidecar.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "mouse",
+      "pup",
+      "single-file",
+      "gene-sidecar"
+    ],
+    "thumbnail": "thumbs/xenium_mouse_pup_v2.jpg",
+    "citation": "10x Genomics. Mouse Pup Preview Data: Xenium Mouse Tissue Atlassing Panel 1 Standard. https://www.10xgenomics.com/datasets/mouse-pup-preview-data-xenium-mouse-tissue-atlassing-panel-1-standard",
+    "status": "development"
   }
 ]

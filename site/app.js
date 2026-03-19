@@ -102,6 +102,10 @@ function buildSearchText(dataset) {
     .toLowerCase();
 }
 
+function isDevelopmentDataset(dataset) {
+  return String(dataset.status || "").trim().toLowerCase() === "development";
+}
+
 function normalizeThumbnailPath(path) {
   const raw = String(path || "").trim();
   if (!raw) {
@@ -213,11 +217,87 @@ function createCard(dataset) {
   return clone;
 }
 
+function createCardsGrid(datasets) {
+  const grid = document.createElement("div");
+  grid.className = "cards-grid";
+  datasets.forEach((dataset) => grid.appendChild(createCard(dataset)));
+  return grid;
+}
+
+function createCardsSection(options) {
+  const { eyebrow, title, description, datasets } = options;
+  const section = document.createElement("section");
+  section.className = "cards-section";
+
+  if (title) {
+    const header = document.createElement("div");
+    header.className = "cards-section__head";
+
+    if (eyebrow) {
+      const eyebrowEl = document.createElement("p");
+      eyebrowEl.className = "cards-section__eyebrow";
+      eyebrowEl.textContent = eyebrow;
+      header.appendChild(eyebrowEl);
+    }
+
+    const titleEl = document.createElement("h2");
+    titleEl.className = "cards-section__title";
+    titleEl.textContent = title;
+    header.appendChild(titleEl);
+
+    if (description) {
+      const descriptionEl = document.createElement("p");
+      descriptionEl.className = "cards-section__description";
+      descriptionEl.textContent = description;
+      header.appendChild(descriptionEl);
+    }
+
+    section.appendChild(header);
+  }
+
+  section.appendChild(createCardsGrid(datasets));
+  return section;
+}
+
 function renderCards(datasets) {
   cardsEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  datasets.forEach((dataset) => fragment.appendChild(createCard(dataset)));
-  cardsEl.appendChild(fragment);
+  const developmentDatasets = [];
+  const stableDatasets = [];
+
+  datasets.forEach((dataset) => {
+    if (isDevelopmentDataset(dataset)) {
+      developmentDatasets.push(dataset);
+      return;
+    }
+    stableDatasets.push(dataset);
+  });
+
+  if (stableDatasets.length) {
+    if (developmentDatasets.length) {
+      cardsEl.appendChild(
+        createCardsSection({
+          eyebrow: "Library",
+          title: "Available datasets",
+          description: "Public KaroSpace viewers available right now.",
+          datasets: stableDatasets
+        })
+      );
+    } else {
+      cardsEl.appendChild(createCardsGrid(stableDatasets));
+    }
+  }
+
+  if (developmentDatasets.length) {
+    cardsEl.appendChild(
+      createCardsSection({
+        eyebrow: "In progress",
+        title: "Under development",
+        description:
+          "Experimental viewers and datasets currently being iterated on.",
+        datasets: developmentDatasets
+      })
+    );
+  }
 
   const count = datasets.length;
   resultCountEl.textContent = `${count} dataset${count === 1 ? "" : "s"} shown`;
