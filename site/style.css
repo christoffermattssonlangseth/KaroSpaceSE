@@ -393,6 +393,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.35rem;
   flex: 0 0 auto;
   min-height: 1.5rem;
   padding: 0.1rem 0.5rem;
@@ -403,6 +404,18 @@ body {
   font-weight: 800;
   letter-spacing: 0.01em;
   line-height: 1;
+}
+
+.tutorial__link-mark svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.tutorial__link-mark--youtube {
+  background: rgba(255, 91, 86, 0.18);
+  border-color: rgba(255, 91, 86, 0.28);
 }
 
 .tutorial__link-mark--biorxiv {
