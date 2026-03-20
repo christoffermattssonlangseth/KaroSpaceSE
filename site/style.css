@@ -587,7 +587,7 @@ body {
 }
 
 .card__thumb-wrap--light .card__thumb-fallback {
-  color: #0f172a;
+  color: var(--accent);
 }
 
 .card__thumb {
