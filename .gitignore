@@ -44,3 +44,9 @@ node_modules/
 !site/*.css
 !site/*.js
 !site/datasets.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
