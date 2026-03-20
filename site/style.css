@@ -581,6 +581,15 @@ body {
   aspect-ratio: 16 / 9;
 }
 
+.card__thumb-wrap--light {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+.card__thumb-wrap--light .card__thumb-fallback {
+  color: #0f172a;
+}
+
 .card__thumb {
   width: 100%;
   height: 100%;
@@ -597,6 +606,13 @@ body {
   font-size: 0.76rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.card__thumb-fallback--label {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1;
 }
 
 .card.has-thumb .card__thumb-fallback {

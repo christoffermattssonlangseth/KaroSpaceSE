@@ -138,13 +138,26 @@ function openViewer(url) {
 function createCard(dataset) {
   const clone = templateEl.content.cloneNode(true);
   const card = clone.querySelector(".card");
+  const thumbWrapEl = clone.querySelector(".card__thumb-wrap");
   const thumbEl = clone.querySelector(".card__thumb");
+  const thumbFallbackEl = clone.querySelector(".card__thumb-fallback");
   const titleEl = clone.querySelector(".card__title");
   const slugEl = clone.querySelector(".card__slug");
   const descEl = clone.querySelector(".card__description");
   const citationEl = clone.querySelector(".card__citation");
   const tagsEl = clone.querySelector(".tag-list");
   const buttonEl = clone.querySelector(".button");
+  const previewLabel = String(dataset.preview_label || "").trim();
+  const previewBackground = String(dataset.preview_background || "").trim().toLowerCase();
+
+  if (previewLabel) {
+    thumbFallbackEl.textContent = previewLabel;
+    thumbFallbackEl.classList.add("card__thumb-fallback--label");
+  }
+
+  if (previewBackground === "light") {
+    thumbWrapEl.classList.add("card__thumb-wrap--light");
+  }
 
   const thumbnail = normalizeThumbnailPath(dataset.thumbnail);
   if (thumbnail) {
@@ -176,13 +189,15 @@ function createCard(dataset) {
     citationEl.classList.remove("hidden");
   }
   const viewerUrl = buildViewerUrl(dataset);
+  const actionLabel = String(dataset.action_label || "Open viewer").trim() || "Open viewer";
   buttonEl.href = viewerUrl;
+  buttonEl.textContent = actionLabel;
 
   card.setAttribute("role", "link");
   card.setAttribute("tabindex", "0");
   card.setAttribute(
     "aria-label",
-    `Open viewer for ${dataset.title || dataset.slug || "dataset"}`
+    `${actionLabel} for ${dataset.title || dataset.slug || "dataset"}`
   );
 
   card.addEventListener("click", (event) => {
@@ -277,8 +292,8 @@ function renderCards(datasets) {
       cardsEl.appendChild(
         createCardsSection({
           eyebrow: "Library",
-          title: "Available datasets",
-          description: "Public KaroSpace viewers available right now.",
+          title: "Available tools and datasets",
+          description: "Public KaroSpace viewers and tools available right now.",
           datasets: stableDatasets
         })
       );
@@ -293,14 +308,14 @@ function renderCards(datasets) {
         eyebrow: "In progress",
         title: "Under development",
         description:
-          "Experimental viewers and datasets currently being iterated on.",
+          "Experimental viewers and tools currently being iterated on.",
         datasets: developmentDatasets
       })
     );
   }
 
   const count = datasets.length;
-  resultCountEl.textContent = `${count} dataset${count === 1 ? "" : "s"} shown`;
+  resultCountEl.textContent = `${count} item${count === 1 ? "" : "s"} shown`;
   emptyEl.classList.toggle("hidden", count !== 0);
 }
 

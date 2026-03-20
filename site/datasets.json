@@ -340,5 +340,23 @@
     "thumbnail": "thumbs/xenium_mouse_pup_v2.jpg",
     "citation": "10x Genomics. Mouse Pup Preview Data: Xenium Mouse Tissue Atlassing Panel 1 Standard. https://www.10xgenomics.com/datasets/mouse-pup-preview-data-xenium-mouse-tissue-atlassing-panel-1-standard",
     "status": "development"
+  },
+  {
+    "title": "KaroSpace Package Loader",
+    "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
+    "slug": "karospace_package_loader",
+    "type": "single",
+    "r2_path": "viewers/karospace-package-loader.html",
+    "tags": [
+      "karospace",
+      "loader",
+      ".karospace",
+      "local file",
+      "drag-and-drop"
+    ],
+    "preview_label": "KPL",
+    "preview_background": "light",
+    "action_label": "Open loader",
+    "status": "development"
   }
 ]
