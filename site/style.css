@@ -609,14 +609,29 @@ body {
 }
 
 .card__thumb-fallback--label {
-  font-size: 1.9rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
+  font-size: 2.05rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
   line-height: 1;
+  font-style: italic;
 }
 
 .card.has-thumb .card__thumb-fallback {
   display: none;
+}
+
+.card__thumb-wrap--light .card__thumb-fallback--label {
+  text-shadow: 0.06em 0.06em 0 rgba(79, 4, 51, 0.14);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .card__thumb-wrap--light .card__thumb-fallback--label {
+    background: linear-gradient(135deg, var(--accent-strong), var(--accent) 58%, #b53178);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+  }
 }
 
 .card__head {
