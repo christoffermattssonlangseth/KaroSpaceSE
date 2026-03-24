@@ -102,6 +102,10 @@ function buildSearchText(dataset) {
     .toLowerCase();
 }
 
+function isDevelopmentDataset(dataset) {
+  return String(dataset.status || "").trim().toLowerCase() === "development";
+}
+
 function normalizeThumbnailPath(path) {
   const raw = String(path || "").trim();
   if (!raw) {
@@ -134,13 +138,26 @@ function openViewer(url) {
 function createCard(dataset) {
   const clone = templateEl.content.cloneNode(true);
   const card = clone.querySelector(".card");
+  const thumbWrapEl = clone.querySelector(".card__thumb-wrap");
   const thumbEl = clone.querySelector(".card__thumb");
+  const thumbFallbackEl = clone.querySelector(".card__thumb-fallback");
   const titleEl = clone.querySelector(".card__title");
   const slugEl = clone.querySelector(".card__slug");
   const descEl = clone.querySelector(".card__description");
   const citationEl = clone.querySelector(".card__citation");
   const tagsEl = clone.querySelector(".tag-list");
   const buttonEl = clone.querySelector(".button");
+  const previewLabel = String(dataset.preview_label || "").trim();
+  const previewBackground = String(dataset.preview_background || "").trim().toLowerCase();
+
+  if (previewLabel) {
+    thumbFallbackEl.textContent = previewLabel;
+    thumbFallbackEl.classList.add("card__thumb-fallback--label");
+  }
+
+  if (previewBackground === "light") {
+    thumbWrapEl.classList.add("card__thumb-wrap--light");
+  }
 
   const thumbnail = normalizeThumbnailPath(dataset.thumbnail);
   if (thumbnail) {
@@ -172,13 +189,15 @@ function createCard(dataset) {
     citationEl.classList.remove("hidden");
   }
   const viewerUrl = buildViewerUrl(dataset);
+  const actionLabel = String(dataset.action_label || "Open viewer").trim() || "Open viewer";
   buttonEl.href = viewerUrl;
+  buttonEl.textContent = actionLabel;
 
   card.setAttribute("role", "link");
   card.setAttribute("tabindex", "0");
   card.setAttribute(
     "aria-label",
-    `Open viewer for ${dataset.title || dataset.slug || "dataset"}`
+    `${actionLabel} for ${dataset.title || dataset.slug || "dataset"}`
   );
 
   card.addEventListener("click", (event) => {
@@ -213,14 +232,90 @@ function createCard(dataset) {
   return clone;
 }
 
+function createCardsGrid(datasets) {
+  const grid = document.createElement("div");
+  grid.className = "cards-grid";
+  datasets.forEach((dataset) => grid.appendChild(createCard(dataset)));
+  return grid;
+}
+
+function createCardsSection(options) {
+  const { eyebrow, title, description, datasets } = options;
+  const section = document.createElement("section");
+  section.className = "cards-section";
+
+  if (title) {
+    const header = document.createElement("div");
+    header.className = "cards-section__head";
+
+    if (eyebrow) {
+      const eyebrowEl = document.createElement("p");
+      eyebrowEl.className = "cards-section__eyebrow";
+      eyebrowEl.textContent = eyebrow;
+      header.appendChild(eyebrowEl);
+    }
+
+    const titleEl = document.createElement("h2");
+    titleEl.className = "cards-section__title";
+    titleEl.textContent = title;
+    header.appendChild(titleEl);
+
+    if (description) {
+      const descriptionEl = document.createElement("p");
+      descriptionEl.className = "cards-section__description";
+      descriptionEl.textContent = description;
+      header.appendChild(descriptionEl);
+    }
+
+    section.appendChild(header);
+  }
+
+  section.appendChild(createCardsGrid(datasets));
+  return section;
+}
+
 function renderCards(datasets) {
   cardsEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  datasets.forEach((dataset) => fragment.appendChild(createCard(dataset)));
-  cardsEl.appendChild(fragment);
+  const developmentDatasets = [];
+  const stableDatasets = [];
+
+  datasets.forEach((dataset) => {
+    if (isDevelopmentDataset(dataset)) {
+      developmentDatasets.push(dataset);
+      return;
+    }
+    stableDatasets.push(dataset);
+  });
+
+  if (stableDatasets.length) {
+    if (developmentDatasets.length) {
+      cardsEl.appendChild(
+        createCardsSection({
+          eyebrow: "Library",
+          title: "Available tools and datasets",
+          description: "Public KaroSpace viewers and tools available right now.",
+          datasets: stableDatasets
+        })
+      );
+    } else {
+      cardsEl.appendChild(createCardsGrid(stableDatasets));
+    }
+  }
+
+  if (developmentDatasets.length) {
+    cardsEl.appendChild(
+      createCardsSection({
+        eyebrow: "In progress",
+        title: "Under development",
+        description:
+          "Experimental viewers and tools currently being iterated on.",
+        datasets: developmentDatasets
+      })
+    );
+  }
 
   const count = datasets.length;
-  resultCountEl.textContent = `${count} dataset${count === 1 ? "" : "s"} shown`;
+  resultCountEl.textContent = `${count} item${count === 1 ? "" : "s"} shown`;
   emptyEl.classList.toggle("hidden", count !== 0);
 }
 
