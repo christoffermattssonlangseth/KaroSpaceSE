@@ -362,6 +362,27 @@
     "status": "development"
   },
   {
+    "title": "Xenium Human Meningioma",
+    "description": "Xenium-based viewer of human meningioma tissue from the meninges with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "xenium_human_meningioma",
+    "type": "single",
+    "r2_path": "viewers/human-meninges-binary-sidecar.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "meningioma",
+      "meninges",
+      "tumor",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "thumbnail": "thumbs/xenium_human_meningioma.jpg",
+    "citation": "Vinsland, E. et al. Cell atlas of the developing human meninges reveals a dura origin of meningioma. bioRxiv 2025.07.08.663122 (2025). doi:10.1101/2025.07.08.663122.",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
