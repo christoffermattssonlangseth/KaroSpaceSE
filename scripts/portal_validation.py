@@ -19,7 +19,14 @@ VALID_DATASET_TYPES = {"single", "directory"}
 SLUG_RE = re.compile(r"[A-Za-z0-9._-]+")
 REMOTE_METHODS = ("HEAD", "GET")
 GENE_AUX_URL_RE = re.compile(r'"gene_aux_url"\s*:\s*"((?:[^"\\]|\\.)*)"')
-GENE_SIDECAR_FORMAT = "karospace-gene-sidecar-manifest-v2"
+GENE_SIDECAR_MANIFEST_FORMATS = {
+    "karospace-gene-sidecar-manifest-v2",
+    "karospace-gene-sidecar-manifest-v3",
+}
+GENE_SIDECAR_JSON_FORMAT = "json-v2"
+GENE_SIDECAR_BINARY_FORMAT = "binary-v1"
+GENE_SIDECAR_BINARY_MAGIC = b"KSB1"
+GENE_SIDECAR_BINARY_VERSION = 1
 
 
 @dataclass
@@ -124,11 +131,32 @@ def _validate_gene_sidecar(html_path: Path, context: str, report: ValidationRepo
     if not isinstance(manifest, dict):
         report.add_error(f"{context}: gene sidecar manifest must contain a JSON object")
         return
-    if manifest.get("format") != GENE_SIDECAR_FORMAT:
+    manifest_format = str(manifest.get("format") or "").strip()
+    if manifest_format not in GENE_SIDECAR_MANIFEST_FORMATS:
         report.add_error(
             f"{context}: unsupported gene sidecar format "
             f"'{manifest.get('format')}' in {aux_path}"
         )
+
+    sidecar_format = str(
+        manifest.get("gene_sidecar_format") or GENE_SIDECAR_JSON_FORMAT
+    ).strip().lower()
+    if sidecar_format not in {GENE_SIDECAR_JSON_FORMAT, GENE_SIDECAR_BINARY_FORMAT}:
+        report.add_error(
+            f"{context}: unsupported gene shard storage format "
+            f"'{manifest.get('gene_sidecar_format')}' in {aux_path}"
+        )
+        return
+
+    if sidecar_format == GENE_SIDECAR_BINARY_FORMAT:
+        section_order = manifest.get("section_order")
+        if not isinstance(section_order, list) or not all(
+            isinstance(section, str) and section.strip() for section in section_order
+        ):
+            report.add_error(
+                f"{context}: binary gene sidecar manifest must contain a non-empty "
+                f"'section_order' list"
+            )
 
     shards = manifest.get("shards")
     if not isinstance(shards, dict) or not shards:
@@ -161,10 +189,43 @@ def _validate_gene_sidecar(html_path: Path, context: str, report: ValidationRepo
             report.add_error(f"{context}: gene shard is not a file {shard_path}")
             continue
 
+        if sidecar_format == GENE_SIDECAR_JSON_FORMAT:
+            if shard_path.suffix.lower() != ".json":
+                report.add_error(
+                    f"{context}: json gene shard must use a .json suffix ({shard_path})"
+                )
+                continue
+            try:
+                _load_json(shard_path)
+            except RuntimeError as exc:
+                report.add_error(f"{context}: {exc}")
+            continue
+
+        if shard_path.suffix.lower() != ".bin":
+            report.add_error(
+                f"{context}: binary gene shard must use a .bin suffix ({shard_path})"
+            )
+            continue
+
         try:
-            _load_json(shard_path)
-        except RuntimeError as exc:
-            report.add_error(f"{context}: {exc}")
+            header = shard_path.read_bytes()[:8]
+        except OSError as exc:
+            report.add_error(f"{context}: unable to read binary gene shard {shard_path}: {exc}")
+            continue
+
+        if len(header) < 8:
+            report.add_error(f"{context}: binary gene shard is truncated {shard_path}")
+            continue
+        if header[:4] != GENE_SIDECAR_BINARY_MAGIC:
+            report.add_error(
+                f"{context}: binary gene shard has invalid magic bytes {shard_path}"
+            )
+            continue
+        version = int.from_bytes(header[4:6], "little")
+        if version != GENE_SIDECAR_BINARY_VERSION:
+            report.add_error(
+                f"{context}: unsupported binary gene shard version {version} in {shard_path}"
+            )
 
 
 def _collect_sidecar_entry_names(root: Path) -> set[str]:
