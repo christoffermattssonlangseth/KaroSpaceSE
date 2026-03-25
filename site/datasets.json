@@ -400,7 +400,7 @@
       "binary-sidecar"
     ],
     "thumbnail": "thumbs/xenium_autism_human_thalamus.jpg",
-    "citation": "Aivazidis, A. et al. A spatial transcriptomic atlas of autism-associated genes identifies convergence in the developing human thalamus. bioRxiv 2025.11.05.685843 (2025) doi:10.1101/2025.11.05.685843.",
+    "citation": "Aivazidis, A., Memi, F., Rademaker, K., et al. A spatial transcriptomic atlas of autism-associated genes identifies convergence in the developing human thalamus. bioRxiv 2025.11.05.685843 (2025) doi:10.1101/2025.11.05.685843.",
     "resource_label": "StageAtlas",
     "resource_url": "https://www.stageatlas.org/",
     "status": "development"
