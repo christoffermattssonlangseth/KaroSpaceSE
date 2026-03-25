@@ -695,6 +695,19 @@ body {
   overflow-wrap: anywhere;
 }
 
+.card__citation-link {
+  width: fit-content;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.card__citation-link:hover,
+.card__citation-link:focus-visible {
+  text-decoration: underline;
+}
+
 .card__meta {
   display: grid;
   gap: 0.5rem;
