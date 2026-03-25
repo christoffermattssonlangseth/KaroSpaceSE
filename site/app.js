@@ -149,6 +149,8 @@ function createCard(dataset) {
   const buttonEl = clone.querySelector(".button");
   const previewLabel = String(dataset.preview_label || "").trim();
   const previewBackground = String(dataset.preview_background || "").trim().toLowerCase();
+  const resourceUrl = String(dataset.resource_url || "").trim();
+  const resourceLabel = String(dataset.resource_label || "Related link").trim() || "Related link";
 
   if (previewLabel) {
     thumbFallbackEl.textContent = previewLabel;
@@ -185,6 +187,15 @@ function createCard(dataset) {
     textEl.className = "card__citation-text";
     textEl.textContent = dataset.citation;
     citationEl.append(labelEl, textEl);
+    if (resourceUrl) {
+      const linkEl = document.createElement("a");
+      linkEl.className = "card__citation-link";
+      linkEl.href = resourceUrl;
+      linkEl.target = "_blank";
+      linkEl.rel = "noopener noreferrer";
+      linkEl.textContent = resourceLabel;
+      citationEl.append(linkEl);
+    }
     citationEl.title = dataset.citation;
     citationEl.classList.remove("hidden");
   }
