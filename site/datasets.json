@@ -454,6 +454,27 @@
     "status": "development"
   },
   {
+    "title": "Human Visium HD Microglia Taxonomy",
+    "description": "Visium HD-based viewer of microglia states across human brain pathologies with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "human_visiumhd_microglia_taxonomy",
+    "type": "single",
+    "r2_path": "viewers/human-visiumhd-binary-sidecar.html",
+    "tags": [
+      "Visium HD",
+      "RNA",
+      "human",
+      "microglia",
+      "brain",
+      "pathology",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "thumbnail": "thumbs/human_visiumhd_microglia_taxonomy.jpg",
+    "citation": "Chhatbar, C. et al. A transcriptomic microglia taxonomy across mouse and human pathologies. Nat. Immunol. 1-15 (2026) doi:10.1038/s41590-026-02472-z.",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
