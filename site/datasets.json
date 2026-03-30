@@ -540,6 +540,27 @@
     "status": "development"
   },
   {
+    "title": "Array-seq Mouse Sepsis Response",
+    "description": "Array-seq-based viewer of the organism-wide mouse response to sepsis with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "array_seq_mouse_sepsis_response",
+    "type": "single",
+    "r2_path": "viewers/gse248904-all-samples-hvg-binary-sidecar.html",
+    "tags": [
+      "Array-seq",
+      "RNA",
+      "mouse",
+      "sepsis",
+      "inflammation",
+      "development",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "thumbnail": "thumbs/array_seq_mouse_sepsis_response.jpg",
+    "citation": "Takahama, M. et al. A pairwise cytokine code explains the organism-wide response to sepsis. Nat. Immunol. 25, 226-239 (2024).",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
