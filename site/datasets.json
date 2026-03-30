@@ -561,6 +561,29 @@
     "status": "development"
   },
   {
+    "title": "Array-seq Mouse Multi-Organ Atlas",
+    "description": "Array-seq-based viewer of the original multi-organ mouse atlas publication with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "array_seq_mouse_multi_organ_atlas",
+    "type": "single",
+    "r2_path": "viewers/label-mouse-all-concat-shared-genes-log1p-non3d-binary-sidecar.html",
+    "tags": [
+      "Array-seq",
+      "RNA",
+      "mouse",
+      "multi-organ",
+      "brain",
+      "kidney",
+      "liver",
+      "olfactory bulb",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "thumbnail": "thumbs/array_seq_mouse_multi_organ_atlas.jpg",
+    "citation": "Cipurko, D., Ueda, T., Mei, L. & Chevrier, N. Repurposing large-format microarrays for scalable spatial transcriptomics. Nat. Methods 22, 145-155 (2025).",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
