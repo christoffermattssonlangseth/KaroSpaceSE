@@ -601,7 +601,7 @@
     "preview_label": "COSMX",
     "preview_background": "light",
     "action_label": "Open hosted viewer",
-    "citation": "Bruker Spatial Biology CosMx Spatial Molecular Imager Dataset. Mouse hemisphere dataset. Cipurko, D., Ueda, T., Mei, L. & Chevrier, N. Repurposing large-format microarrays for scalable spatial transcriptomics. Nat. Methods 22, 145-155 (2025).",
+    "citation": "Bruker Spatial Biology CosMx Spatial Molecular Imager Dataset. Mouse hemisphere dataset.",
     "status": "development"
   },
   {
