@@ -598,8 +598,7 @@
       "hippocampus",
       "single-file"
     ],
-    "preview_label": "COSMX",
-    "preview_background": "light",
+    "thumbnail": "thumbs/cosmx_mouse_hemisphere.jpg",
     "action_label": "Open hosted viewer",
     "citation": "Bruker Spatial Biology CosMx Spatial Molecular Imager Dataset. Mouse hemisphere dataset.",
     "status": "development"
