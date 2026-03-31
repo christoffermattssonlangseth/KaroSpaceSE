@@ -347,9 +347,17 @@ def _validate_manifest(viewer_dir: Path, manifest_path: Path, context: str, repo
 
 def validate_viewer_entry(r2_path: str, dataset_type: str, viewers_root: Path, context: str) -> ValidationReport:
     report = ValidationReport()
-    relative_path = str(r2_path or "").lstrip("/")
+    raw_path = str(r2_path or "").strip()
+    relative_path = raw_path.lstrip("/")
     if not relative_path:
         report.add_error(f"{context}: missing r2_path")
+        return report
+
+    if _is_remote_like(raw_path):
+        if dataset_type == "single" and not raw_path.lower().endswith(".html"):
+            report.add_error(f"{context}: single viewer r2_path must point to an .html file")
+        if dataset_type == "directory" and not raw_path.lower().endswith("/index.html"):
+            report.add_error(f"{context}: directory viewer r2_path must point to index.html")
         return report
 
     try:

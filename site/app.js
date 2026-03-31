@@ -91,7 +91,11 @@ function normalizeViewerHost(value) {
 }
 
 function buildViewerUrl(dataset) {
-  const path = normalizePath(dataset.r2_path);
+  const raw = String(dataset.r2_path || "").trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    return raw;
+  }
+  const path = normalizePath(raw);
   return `${viewerHost}/${path}`;
 }
 
