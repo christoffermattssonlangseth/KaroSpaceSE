@@ -588,7 +588,7 @@
     "description": "Hosted Bruker CosMx Spatial Molecular Imager viewer for mouse hemisphere and hippocampus tissue.",
     "slug": "cosmx_mouse_hemisphere",
     "type": "single",
-    "r2_path": "https://objects.liquidweb.services/smi-public/wtx_manuscript/brain_hippocampus/index_hippocampus.html",
+    "r2_path": "https://viewers.karospace.se/viewers/mubrain-release-seurat-binary-sidecar.html",
     "tags": [
       "CosMx",
       "Bruker",
