@@ -584,6 +584,27 @@
     "status": "development"
   },
   {
+    "title": "CosMx Mouse Hemisphere",
+    "description": "Hosted Bruker CosMx Spatial Molecular Imager viewer for mouse hemisphere and hippocampus tissue.",
+    "slug": "cosmx_mouse_hemisphere",
+    "type": "single",
+    "r2_path": "https://objects.liquidweb.services/smi-public/wtx_manuscript/brain_hippocampus/index_hippocampus.html",
+    "tags": [
+      "CosMx",
+      "Bruker",
+      "RNA",
+      "mouse",
+      "hemisphere",
+      "hippocampus",
+      "single-file"
+    ],
+    "preview_label": "COSMX",
+    "preview_background": "light",
+    "action_label": "Open hosted viewer",
+    "citation": "Bruker Spatial Biology CosMx Spatial Molecular Imager Dataset. Mouse hemisphere dataset. Cipurko, D., Ueda, T., Mei, L. & Chevrier, N. Repurposing large-format microarrays for scalable spatial transcriptomics. Nat. Methods 22, 145-155 (2025).",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
