@@ -688,6 +688,27 @@
     "thumbnail": "thumbs/cosmx_human_whole_transcriptome_skin.jpg"
   },
   {
+    "title": "CosMx Human Whole Transcriptome Brain",
+    "description": "CosMx-based viewer of the Bruker human whole transcriptome brain FFPE dataset with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "cosmx_human_whole_transcriptome_brain",
+    "type": "single",
+    "r2_path": "viewers/bruker-wtx-brain-binary-sidecar.html",
+    "tags": [
+      "CosMx",
+      "Bruker",
+      "RNA",
+      "human",
+      "brain",
+      "FFPE",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Bruker Spatial Biology CosMx Human Whole Transcriptome Brain Dataset. https://brukerspatialbiology.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/",
+    "status": "development",
+    "thumbnail": "thumbs/cosmx_human_whole_transcriptome_brain.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
