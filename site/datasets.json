@@ -689,7 +689,7 @@
   },
   {
     "title": "CosMx Human Whole Transcriptome Brain",
-    "description": "CosMx-based viewer of the Bruker human whole transcriptome brain FFPE dataset with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "description": "CosMx-based viewer of the Bruker human whole transcriptome brain FFPE dataset with single-file delivery, binary sidecar-loaded gene expression shards, and a full-resolution sample preview.",
     "slug": "cosmx_human_whole_transcriptome_brain",
     "type": "single",
     "r2_path": "viewers/bruker-wtx-brain-binary-sidecar.html",
