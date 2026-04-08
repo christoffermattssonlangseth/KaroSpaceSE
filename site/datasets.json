@@ -729,6 +729,26 @@
     "thumbnail": "thumbs/xenium_mouse_brain_unpublished.jpg"
   },
   {
+    "title": "Human Glioblastoma Atlas",
+    "description": "Human glioblastoma spatial transcriptomics viewer with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "human_glioblastoma_atlas",
+    "type": "single",
+    "r2_path": "viewers/glioblastoma-binary-sidecar.html",
+    "tags": [
+      "RNA",
+      "human",
+      "brain",
+      "glioblastoma",
+      "tumor",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Sonpatki, P. et al. A spatially resolved human glioblastoma atlas reveals distinct cellular and molecular patterns of anatomical niches. Nat. Commun. 17, 2951 (2026).",
+    "status": "development",
+    "thumbnail": "thumbs/human_glioblastoma_atlas.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
