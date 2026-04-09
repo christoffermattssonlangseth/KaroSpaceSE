@@ -792,6 +792,27 @@
     "thumbnail": "thumbs/visum_mouse_brain_demyelination_infection.jpg"
   },
   {
+    "title": "Xenium Mouse Melanoma",
+    "description": "Unpublished Xenium mouse melanoma dataset with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "xenium_mouse_melanoma_unpublished",
+    "type": "single",
+    "r2_path": "viewers/talbot-xenium-tumor-cellcharter-binary-sidecar.html",
+    "tags": [
+      "Xenium",
+      "RNA",
+      "mouse",
+      "melanoma",
+      "tumor",
+      "unpublished",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Unpublished dataset.",
+    "status": "development",
+    "thumbnail": "thumbs/xenium_mouse_melanoma_unpublished.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
