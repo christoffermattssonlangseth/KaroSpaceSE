@@ -770,6 +770,28 @@
     "thumbnail": "thumbs/human_glioblastoma_atlas_xenium.jpg"
   },
   {
+    "title": "Visum Mouse Brain Demyelination and Infection",
+    "description": "Visium-based viewer of mouse brain demyelination and influenza A infection with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "visum_mouse_brain_demyelination_infection",
+    "type": "single",
+    "r2_path": "viewers/gse253710-binary-sidecar.html",
+    "tags": [
+      "Visium",
+      "RNA",
+      "mouse",
+      "brain",
+      "demyelination",
+      "influenza A",
+      "infection",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Louie, A. Y. et al. Respiratory infection with influenza A virus delays remyelination and alters oligodendrocyte metabolism. iScience 27, 110464 (2024).",
+    "status": "development",
+    "thumbnail": "thumbs/visum_mouse_brain_demyelination_infection.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
