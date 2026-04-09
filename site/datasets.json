@@ -834,6 +834,27 @@
     "thumbnail": "thumbs/human_bone_spatial_atlas.jpg"
   },
   {
+    "title": "Mouse Post-Natal Cardiac Development",
+    "description": "Spatial transcriptomics viewer of post-natal mouse cardiac development with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "mouse_postnatal_cardiac_development",
+    "type": "single",
+    "r2_path": "viewers/dev-heart-combined-binary-sidecar.html",
+    "tags": [
+      "RNA",
+      "mouse",
+      "heart",
+      "cardiac",
+      "development",
+      "post-natal",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Zheng, Y. et al. A dataset of spatially resolved transcriptomics of post-natal cardiac development in mice. Sci. Data 12, 1531 (2025).",
+    "status": "development",
+    "thumbnail": "thumbs/mouse_postnatal_cardiac_development.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
