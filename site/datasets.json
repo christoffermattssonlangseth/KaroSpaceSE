@@ -813,6 +813,27 @@
     "thumbnail": "thumbs/xenium_mouse_melanoma_unpublished.jpg"
   },
   {
+    "title": "Human Bone Spatial Atlas",
+    "description": "Visium-based viewer of human bone tissue from the spatial atlas study, delivered as a single-file viewer with binary sidecar-loaded gene expression shards.",
+    "slug": "human_bone_spatial_atlas",
+    "type": "single",
+    "r2_path": "viewers/gse284089-gsm8677818-binary-sidecar.html",
+    "tags": [
+      "Visium",
+      "RNA",
+      "human",
+      "bone",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Lin, W. et al. Mapping the spatial atlas of the human bone tissue integrating spatial and single-cell transcriptomics. Nucleic Acids Res. 53, gkae1298 (2025).",
+    "status": "development",
+    "preview_label": "BONE",
+    "preview_background": "light",
+    "thumbnail": "thumbs/human_bone_spatial_atlas.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
