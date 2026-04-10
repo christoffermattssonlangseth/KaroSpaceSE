@@ -855,6 +855,24 @@
     "thumbnail": "thumbs/mouse_postnatal_cardiac_development.jpg"
   },
   {
+    "title": "PSC Visium",
+    "description": "PSC Visium viewer with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "psc_visium",
+    "type": "single",
+    "r2_path": "viewers/psc-visum-binary-sidecar.html",
+    "tags": [
+      "Visium",
+      "RNA",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar",
+      "cellxgene"
+    ],
+    "citation": "Dataset downloaded from cellxgene.",
+    "status": "development",
+    "thumbnail": "thumbs/psc_visium.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
