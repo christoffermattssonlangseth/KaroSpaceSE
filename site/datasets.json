@@ -934,6 +934,28 @@
     "thumbnail": "thumbs/developing_human_lung_cellxgene.jpg"
   },
   {
+    "title": "DBiT Mouse E13 Multiplexed Spatial Mapping",
+    "description": "DBiT-seq viewer of mouse E13 embryo tissue from a study on multiplexed spatial mapping of chromatin features, transcriptome, and proteins, with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "dbit_mouse_e13_multiplexed_spatial",
+    "type": "single",
+    "r2_path": "viewers/dbit-30258697-e13-20-fig3-binary-sidecar.html",
+    "tags": [
+      "DBiT",
+      "RNA",
+      "mouse",
+      "embryo",
+      "E13",
+      "chromatin",
+      "transcriptome",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Guo, P. et al. Multiplexed spatial mapping of chromatin features, transcriptome and proteins in tissues. Nat. Methods 22, 520–529 (2025).",
+    "status": "development",
+    "thumbnail": "thumbs/dbit_mouse_e13_multiplexed_spatial.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
