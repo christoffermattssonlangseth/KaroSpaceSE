@@ -934,6 +934,24 @@
     "thumbnail": "thumbs/developing_human_lung_cellxgene.jpg"
   },
   {
+    "title": "ST BRICHOS Region Subcluster",
+    "description": "Spatial Transcriptomics (pre-Visium) viewer of BRICHOS region subclusters with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "st_brichos_region_subcluster",
+    "type": "single",
+    "r2_path": "viewers/st-brichos-region-subcluster-binary-sidecar.html",
+    "tags": [
+      "ST",
+      "RNA",
+      "BRICHOS",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Unpublished dataset.",
+    "status": "development",
+    "thumbnail": "thumbs/st_brichos_region_subcluster.jpg"
+  },
+  {
     "title": "DBiT Mouse E13 50μm Multiplexed Spatial Mapping",
     "description": "DBiT-seq viewer of mouse E13 embryo tissue at 50μm resolution from a study on multiplexed spatial mapping of chromatin features, transcriptome, and proteins, with single-file delivery and binary sidecar-loaded gene expression shards.",
     "slug": "dbit_mouse_e13_50um_multiplexed_spatial",
