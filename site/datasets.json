@@ -709,26 +709,6 @@
     "thumbnail": "thumbs/cosmx_human_whole_transcriptome_brain.jpg"
   },
   {
-    "title": "Mouse Brain Data",
-    "description": "Unpublished Xenium mouse brain dataset with single-file delivery and binary sidecar-loaded gene expression shards.",
-    "slug": "xenium_mouse_brain_unpublished",
-    "type": "single",
-    "r2_path": "viewers/mtdna-dsb-brain-novae4-binary-sidecar.html",
-    "tags": [
-      "Xenium",
-      "RNA",
-      "mouse",
-      "brain",
-      "unpublished",
-      "single-file",
-      "gene-sidecar",
-      "binary-sidecar"
-    ],
-    "citation": "Unpublished dataset.",
-    "status": "development",
-    "thumbnail": "thumbs/xenium_mouse_brain_unpublished.jpg"
-  },
-  {
     "title": "Human Glioblastoma Atlas",
     "description": "Human glioblastoma spatial transcriptomics viewer with single-file delivery and binary sidecar-loaded gene expression shards.",
     "slug": "human_glioblastoma_atlas",
