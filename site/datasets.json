@@ -976,6 +976,26 @@
     "thumbnail": "thumbs/dbit_mouse_e13_multiplexed_spatial.jpg"
   },
   {
+    "title": "Alzheimer's Circadian Disruption Mouse Brain",
+    "description": "Spatial transcriptomics viewer of brain-wide circadian disruption in an Alzheimer's disease mouse model with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "alzheimers_circadian_mouse_brain",
+    "type": "single",
+    "r2_path": "viewers/gse282203-combined-binary-sidecar.html",
+    "tags": [
+      "RNA",
+      "mouse",
+      "brain",
+      "Alzheimer's",
+      "circadian",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Gelber, A. et al. Spatial transcriptomics reveals brain-wide circadian disruption in an Alzheimer's disease model. bioRxiv 2026.01.26.701799 (2026) doi:10.64898/2026.01.26.701799.",
+    "status": "development",
+    "thumbnail": "thumbs/alzheimers_circadian_mouse_brain.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
