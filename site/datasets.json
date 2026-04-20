@@ -1015,6 +1015,28 @@
     "thumbnail": "thumbs/lipid_brain_atlas.jpg"
   },
   {
+    "title": "Atera Human Breast Cancer",
+    "description": "10x Genomics Atera whole transcriptome viewer of FFPE human breast cancer tissue with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "atera_human_breast_cancer",
+    "type": "single",
+    "r2_path": "viewers/atera-human-breast-cancer-binary-sidecar.html",
+    "tags": [
+      "Atera",
+      "10x Genomics",
+      "RNA",
+      "human",
+      "breast cancer",
+      "FFPE",
+      "whole transcriptome",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "10x Genomics Atera WTA FFPE Human Breast Cancer Dataset. https://www.10xgenomics.com/datasets/atera-wta-ffpe-human-breast-cancer",
+    "status": "development",
+    "thumbnail": "thumbs/atera_human_breast_cancer.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
