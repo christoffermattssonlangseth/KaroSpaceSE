@@ -996,6 +996,25 @@
     "thumbnail": "thumbs/alzheimers_circadian_mouse_brain.jpg"
   },
   {
+    "title": "Lipid Brain Atlas",
+    "description": "MALDI-MSI lipidomics viewer of the mouse brain lipidome with single-file delivery and binary sidecar-loaded expression shards.",
+    "slug": "lipid_brain_atlas",
+    "type": "single",
+    "r2_path": "viewers/lipid-brain-atlas-binary-sidecar.html",
+    "tags": [
+      "MALDI-MSI",
+      "lipidomics",
+      "mouse",
+      "brain",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Bassini, L. F. et al. The lipidomic architecture of the mouse brain. (2025) doi:10.1101/2025.10.13.682018.",
+    "status": "development",
+    "thumbnail": "thumbs/lipid_brain_atlas.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
