@@ -1037,6 +1037,27 @@
     "thumbnail": "thumbs/atera_human_breast_cancer.jpg"
   },
   {
+    "title": "Spaceflight Mouse Brain Visium",
+    "description": "Visium-based spatial transcriptomics viewer of mouse brain neuronal effects induced by spaceflight with single-file delivery and binary sidecar-loaded gene expression shards.",
+    "slug": "spaceflight_mouse_brain_visium",
+    "type": "single",
+    "r2_path": "viewers/rr3-brain-st-final-object-binary-sidecar.html",
+    "tags": [
+      "Visium",
+      "RNA",
+      "mouse",
+      "brain",
+      "spaceflight",
+      "multiomics",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "citation": "Masarapu, Y. et al. Spatially resolved multiomics on the neuronal effects induced by spaceflight in mice. Nat. Commun. 15, 4778 (2024).",
+    "status": "development",
+    "thumbnail": "thumbs/spaceflight_mouse_brain_visium.jpg"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
