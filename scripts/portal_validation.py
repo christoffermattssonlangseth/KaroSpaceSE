@@ -22,6 +22,7 @@ GENE_AUX_URL_RE = re.compile(r'"gene_aux_url"\s*:\s*"((?:[^"\\]|\\.)*)"')
 GENE_SIDECAR_MANIFEST_FORMATS = {
     "karospace-gene-sidecar-manifest-v2",
     "karospace-gene-sidecar-manifest-v3",
+    "karospace-gene-sidecar-manifest-v4",
 }
 GENE_SIDECAR_JSON_FORMAT = "json-v2"
 GENE_SIDECAR_BINARY_FORMAT = "binary-v1"
