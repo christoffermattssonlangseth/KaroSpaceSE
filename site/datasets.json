@@ -1079,6 +1079,29 @@
     "status": "development"
   },
   {
+    "title": "Xenium Human Breast Cancer (H&E + DAPI)",
+    "description": "Xenium-based viewer of two annotated human breast cancer sections with H&E and DAPI histology imagery embedded in a single-file viewer and binary sidecar-loaded gene expression shards.",
+    "slug": "xenium_dapi_he_breast_cancer_2samples_annotated",
+    "type": "single",
+    "r2_path": "viewers/xenium_dapi_he_breast_cancer_2samples_annotated.html",
+    "tags": [
+      "xenium",
+      "RNA",
+      "human",
+      "breast cancer",
+      "H&E",
+      "DAPI",
+      "histology",
+      "annotated",
+      "single-file",
+      "gene-sidecar",
+      "binary-sidecar"
+    ],
+    "thumbnail": "thumbs/xenium_dapi_he_breast_cancer_2samples_annotated.jpg",
+    "citation": "10x Genomics. Xenium Human Breast Dataset Explorer. https://www.10xgenomics.com/products/xenium-in-situ/human-breast-dataset-explorer",
+    "status": "development"
+  },
+  {
     "title": "KaroSpace Package Loader",
     "description": "Load a local .karospace package directly in the browser and explore it without uploading anything.",
     "slug": "karospace_package_loader",
