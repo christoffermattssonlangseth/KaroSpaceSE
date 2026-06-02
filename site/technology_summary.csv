@@ -1,0 +1,16 @@
+Technology;Datasets;Total Cells/Spots;Avg Genes;Species;Modality
+Xenium (10x);15;24750014;1180;human/mouse;Targeted RNA
+CosMx (Bruker/NanoString);8;2427633;12935;human/mouse;Targeted/WTX RNA
+Visium;11;651174;19549;human/mouse;Seq-based RNA
+Visium HD;3;193925;12157;human/mouse;Seq-based RNA
+MERFISH;3;9745251;190;human/mouse;Targeted RNA
+DBiT-seq;3;55113;53719;mouse;Multiome
+Array-seq;2;2577803;12107;mouse;Seq-based RNA
+Open-ST;2;1181989;300;human/mouse;Seq-based RNA
+HybISS;2;582136;100;human/mouse;Targeted RNA
+Atera (10x);1;170022;18022;human;WTX RNA
+CARTANA;1;270878;6;mouse;Targeted RNA
+MALDI-MSI;1;8638790;16;mouse;Lipidomics
+CODEX;1;707474;29;mouse;Protein
+ST (pre-Visium);1;25660;18751;mouse;Seq-based RNA
+Total;54;51977862;;12 technologies;
